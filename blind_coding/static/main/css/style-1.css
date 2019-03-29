@@ -1,0 +1,62 @@
+* {
+  box-sizing: border-box;
+}
+body {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin: 0;
+}
+#main {
+  display: flex;
+  flex: 1;
+}
+#main > .left {
+  flex: 1;
+  order: 1;
+  sizing: expand;
+}
+/* #main > nav, */
+#main > .right {
+  flex: 0 0 50vw;
+}
+/* #main > nav {
+  background: #D7E8D4;
+  order: 3;
+} */
+#main > .right {
+  background: beige;
+  order: 2;
+  sizing: expand;
+}
+header, footer {
+  background: #1c93ee;
+  height: 10vh;
+}
+header, footer, .left,.right {
+  padding: 1em;
+}
+
+.editor{
+  width: 100%;
+  height: 70%;
+}
+.outputArea{
+  width: 100%;
+  height: 20%;
+  margin-top: 10px;
+}
+
+.editor textarea,.outputArea textarea{
+  width: 100%;
+  height: 100%;
+  /* top: 0; */
+  resize: none;
+}
+
+/* .options{
+  display: flex;
+} */
+.run,.submit{
+  width: 10vw;
+}

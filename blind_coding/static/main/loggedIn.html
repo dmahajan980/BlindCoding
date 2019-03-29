@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		{% load staticfiles %}
+		<link rel="stylesheet" href="{% static '/css/style-1.css' %}">
+	</head>
+	<body>
+	  <header>Header</header>
+	  <div id="main">
+			<div class="left">
+				You have C=100,000 cakes, numbered 1 through C. Each cake has an integer height; initially, the height of each cake is 0. There are N operations. In each operation, you are given two integers L and R, and you should increase by 1 the height of each of the cakes L,L+1,…,R. One of these N operations should be removed and the remaining N−1 operations are then performed. Chef wants to remove one operation in such a way that after the remaining N−1 operations are performed, the number of cakes with height exactly K is maximum possible. Since Chef is a bit busy these days, he has asked for your help. You need to find the maximum number of cakes with height exactly K that can be achieved by removing one operation.
+			</div>
+			<div class="right">
+
+				<div class="language">
+					<select id="langSelect">
+					  <option value='c'>C</option>
+					  <option value='java'>Java</option>
+						<option value='cpp'>C++</option>
+						<option value='cpp14'>C++14</option>
+						<option value='python2'>Python2</option>
+						<option value='python3'>Python3</option>
+					</select>
+				</div>
+
+				<div class="editor">
+					<textarea id="codeInput"></textarea>
+				</div>
+
+				<div class="outputArea">
+					<textarea id="compilerOutput"></textarea>
+				</div>
+
+				<div class="options">
+					<button class="run" onclick="runCode()">Run</button>
+					<button class="submit">Submit</button>
+				</div>
+
+			</div>
+	  </div>
+	  <footer>Footer</footer>
+		<script src="{% static '/app.js' %}"></script>
+	</body>
+</html>

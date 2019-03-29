@@ -1,0 +1,111 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    background: black;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    overflow: hidden;
+}
+
+#header {
+    width: 100%;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#header ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#header ul li {
+    font-size: 20px;
+    color: #ec6e26;
+    margin: 5px 20px;
+    cursor: pointer;
+}
+
+#content {
+    min-width: 70vw;
+    min-height: 60vh;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-flow: column;
+}
+
+.row {
+    display: flex;
+}
+
+#content button {
+    outline: none;
+    font-size: 20px;
+    padding: 0px 20px;
+    width: 15vw;
+    min-height: 7vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ec6e26;
+    border: 0.5px solid #ec6e26;
+    border-radius: 5px;
+    margin: 10px 0;
+    cursor: pointer;
+}
+
+#content button:focus {
+    outline: none;
+}
+
+#content #details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    color: whitesmoke;
+    justify-content: flex-start;
+}
+
+.title {
+    font-size: 45px;
+    font-weight: bold;
+}
+
+.descrip {
+    width: 90%;
+}
+
+#event-logo {
+    position: relative;
+    margin-top: 70px;
+    margin-right: 20px;
+    width: 250px;
+    height: 200px;
+}
+
+#footer {
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: stretch;
+}
+
+#footer p {
+    margin: 10px auto;
+}
+
+.club-logo {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    width: 70px;
+    height: 70px;
+}
