@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Blind Coding: A Coding Club event for APOGEE</title>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,600,700" rel="stylesheet">
-	{% load staticfiles %}
+	{% load static %}
 	<link rel="stylesheet" href="../../static/css/style-1.css">
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -101,11 +101,11 @@
 				</div>
 
 				<div class="editor ">
-					<textarea id="codeInput" class="no-copy-paste noselect" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="//Write your code here!"></textarea>
+					<textarea id="codeInput" class="no-copy-paste noselect" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="// Write your code here!"></textarea>
 				</div>
 
 				<div class="outputArea">
-					<textarea id="compilerOutput" class="no-copy-paste noselect" autocorrect="off" autocapitalize="off" spellcheck="false" disabled placeholder="//Output will be shown here when you click 'Run'!"></textarea>
+					<textarea id="compilerOutput" class="no-copy-paste noselect" autocorrect="off" autocapitalize="off" spellcheck="false" disabled placeholder="// Output will be shown here when you click 'Run'!"></textarea>
 				</div>
 
 				<div class="options">
@@ -117,6 +117,28 @@
 	  <div class="scoreboard">
 		<span><i class="material-icons">star_border</i><span id="score">00</span></span>
 		<span><i class="material-icons">timer</i><span id="timer">00:00</span></span>
+	  </div>
+	  <div class="leaderboard-icon">
+		<i class="material-icons li">insert_chart</i>
+	  </div>
+	  <div class="leaderboard">
+		<table>
+			<tr>
+			  <th class="rank">Rank</th>
+			  <th class="name">Name</th>
+			  <th class="score">Points</th>
+			</tr>
+			<tr>
+			  <td class="rank">1</td class="rank">
+			  <td class="name">DM</td class="name">
+			  <td class="score">50</td class="score">
+			</tr>
+			<tr>
+			  <td class="rank">2</td class="rank">
+			  <td class="name">BK</td class="name">
+			  <td class="score">10</td class="score">
+			</tr>
+		  </table>
 	  </div>
 	  <div id="footer">
             <p>&copy; Coding Club ,2019</p>
