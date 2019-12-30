@@ -148,6 +148,10 @@ const sendRequest = (method,url,data) => {
 		  if(getOutput().output == 'Correct Answer')
 			  start = 0;
 //		  startClock();
+		 qNo = receivedData['qNo'] + 1;
+		  console.log(qNo);
+		  document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
+		  document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
 		  return recievedData;
 		}
 		else{
