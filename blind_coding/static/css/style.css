@@ -12,10 +12,10 @@ body, html {
 
 #apogeeLogo {
     position: absolute;
-    top: 20px;
-    left: 25px;
-    width: 200px;
-    height: 95px;
+    top: 1vw;
+    left: 2vw;
+    width: 160px;
+    height: 80px;
 }
 
 .backdrop {
@@ -124,6 +124,10 @@ body, html {
     flex-flow: column; */
 }
 
+#content a, #header a {
+    text-decoration: none;
+}
+
 .row {
     display: flex;
 }
@@ -172,9 +176,13 @@ body, html {
 .descrip {
     width: 90%;
     line-height: 1.7;
-    font-size: 1.2rem;
+    font-size: 1.05rem;
     margin-bottom: 4vh;
 }
+
+/* br:nth-child(2) {
+    display: none;
+} */
 
 #event-logo {
     position: relative;
