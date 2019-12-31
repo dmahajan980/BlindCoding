@@ -1,7 +1,7 @@
 # Blind Coding
 
 ## Bugs to be fixed/ Features to be added 
-- [ ] Timer is not working properly, fix it
+- [X] Timer is not working properly, fix it
 - [ ] When user gets a question correct, automatically redirect to next question
 - [ ] Add a live leaderboard
 - [ ] Change frontend
