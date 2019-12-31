@@ -30,6 +30,7 @@ inp.addEventListener('select', function() {
         if (ctrlDown && (e.keyCode == vKey)) console.log("Document catch Ctrl+V");
     });
 
+  // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
     $('.leaderboard').fadeToggle();
@@ -44,97 +45,96 @@ inp.addEventListener('select', function() {
     }
   })
 });
+
 const languages = ['c','java','cpp','cpp14','python2','python3'];
-
 const versions = ['0','1','2'];
-
-var code = `
+let code = `
 #include <stdio.h>
 int main(){
   printf("Hello World num entered is :");
   return 0;
 }`;
-
 let langNo = 0;
 let versionNo = 0;
 let input = '1';
 let output = '';
-let qNo=0;
+let qNo = 0;
 let tc1 = '';
 let tc2 = '';
 let tc3 = '';
 
-const setCode = (prog)=>{
+const setCode = prog => {
   code = prog;
 };
-
-const getCode = () => {
-  return code;
-};
+const getCode = () => { code }
 
 
-const setLanguage = (langNum) => {
+const setLanguage = langNum => {
   langNo = langNum;
 };
-
-const getLanguage = () => {
-  return langNo;
-};
+const getLanguage = () => { langNo };
 
 
-const setVersion = (vrsn) => {
+const setVersion = vrsn => {
   versionNo = vrsn;
 };
+const getVersion = () => { versions[versionNo] };
 
-const getVersion = () => {
-  return versions[versionNo];
-}
 
-const setCustomInput = (inp)=>{
+const setCustomInput = inp => {
   input = inp;
 }
+const getCustomInput = () => { input };
 
-const getCustomInput = ()=>{
-  return input;
-}
 
-const setOutput = (outp) => {
-  console.log('Result:',outp);
+const setOutput = outp => {
   output = outp;
 };
+const getOutput = () => { output };
 
-const getOutput = () => {
-  return output;
-};
+function getQNum() { 
+  return qNo 
+}
 
+// Get the various inputs and send it to server
 const runCode = () => {
-  stopClock();
-	console.log('time elapsed is: ',start);
+  // Pause, send time or store time
+  // stopClock();
+  pauseTime()
+
+  console.log(`Time elapsed is: ${m} minutes and ${s} seconds`);
+  
+  // Get code entered by the user and store it
   let prog = document.getElementById("codeInput").value;
-  setCode(prog);
+  // setCode(prog);
 
+  // Get language chosen by the user and store it
   let lang = document.getElementById("langSelect").value;
-  setLanguage(lang);
+  // setLanguage(lang);
 
-  console.log('Language: ',getLanguage(),'code: ',getCode());
+  // console.log('Language: ', getLanguage(), '\nCode: ', getCode());
+  let time = m * 60 + s;
 
+  console.log(getQNum())
 
-  var program = {
-      script : getCode(),
-      language: getLanguage(),
-      versionIndex: getVersion(),
+  let program = {
+      // Code equals script
+      // script : getCode(),
+      // language: getLanguage(),
+      script : prog,
+      language: lang,
+      versionIndex: versions[versionNo],
       clientId: "222a2ef84f6881409d32ae21369d1a32",
-   	  clientSecret:"67872757630a355db890ee74b6b20926cb9e025dbb444182df2bd2700fc64af1",
+   	  clientSecret: "67872757630a355db890ee74b6b20926cb9e025dbb444182df2bd2700fc64af1",
       stdin: getCustomInput(), //to give custom input
-	  qNo: getQNum(),
-	  timeElapsed: start
+      qNo: getQNum(),
+      timeElapsed: time
   };
 
-  //just send this object to jdoodle url and send back the response
-  // for all test cases backend checks the output and returns no of test cases cleared
-  let resp = sendRequest('POST','runCode/',program);
-	
-
+  // Send the code to jdoodle url with all other required parameters
+  // For all test cases backend checks the output and returns no of test cases cleared
+  // let resp = sendRequest('POST', 'runCode/', program);
+  sendRequest('POST', 'runCode/', program);
 };
 
 function getCookie(name) {
@@ -143,95 +143,107 @@ function getCookie(name) {
 }
 
 
-const sendRequest = (method,url,data) => {   
- var csrf_token = getCookie('csrftoken');
-  var ourRequest = new XMLHttpRequest();
-  ourRequest.open(method,url, true);
+const sendRequest = (method, url, data) => {   
+  let csrf_token = getCookie('csrftoken');
+  let ourRequest = new XMLHttpRequest();
+
+  ourRequest.open(method, url, true);
   ourRequest.setRequestHeader("Content-type", "application/json");
   ourRequest.setRequestHeader("X-CSRFToken", csrf_token);
+
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
-		if(url == 'runCode/'){
-		  let recievedData = JSON.parse(ourRequest.responseText);
-		  setOutput(recievedData);
-		  document.getElementById("compilerOutput").value = getOutput().output;
-		  document.getElementById('score').innerHTML = recievedData['score'];
-		  console.log(recievedData['score']);
-		  if(getOutput().output == 'Correct Answer')
-			  start = 0;
-//		  startClock();
-		  return recievedData;
-		}
-		else{
-			let recievedData = JSON.parse(ourRequest.responseText);
-			let inpt = recievedData['sampIn'].split(' ');
-			let inStr = '';
-			for(let i=0;i<inpt.length;i++)
-			{
-				inStr+=inpt[i];
-				inStr+='\n';
-			}
-			let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
-			console.log('hi ',recievedData);
-  			document.getElementsByClassName('left')[0].innerHTML=que;
-			qNo = recievedData['qNo'];
-			console.log(qNo);
-			console.log(recievedData['userScore']);
-			document.getElementById('score').innerHTML = recievedData['userScore'];
-			return recievedData;
-		}
+      console.log('success 200');
+      
+      if (url == 'runCode/'){
+        console.log('1');
+        
+        let recievedData = JSON.parse(ourRequest.responseText);
+        setOutput(recievedData);
+        document.getElementById("compilerOutput").value = getOutput();
+        document.getElementById('score').innerHTML = recievedData['score'];
+        console.log(recievedData['score']);
+        if(getOutput() == 'Correct Answer') {
+          // start = 0;
+          s = 0;
+          m = 0;
+        }
+        // startClock();
+        console.log("OO")
+        increaseTime()
+
+        console.log(recievedData);
+
+        return recievedData;
+      }
+      else {
+        console.log('2')
+
+        let recievedData = JSON.parse(ourRequest.responseText);
+        let inpt = recievedData['sampIn'].split(' ');
+        let inStr = '';
+        for(let i = 0; i < inpt.length; i++) {
+          inStr += inpt[i];
+          inStr += '\n';
+        }
+        let que = recievedData['question'] + '<br><br>'+'Sample Input' + '<br>' + recievedData['sampTCNum'] + '<br>' + inStr + '<br><br>' + 'Sample Output' + '<br>' + recievedData['sampleOut'];
+        console.log('Hi ',recievedData);
+        document.getElementsByClassName('left')[0].innerHTML = que;
+        qNo = recievedData['qNo'];
+        console.log(qNo);
+        console.log(recievedData['userScore']);
+        document.getElementById('score').innerHTML = recievedData['userScore'];
+
+        console.log(recievedData);
+
+        return recievedData;
+      }
+    
     } else {
       // Nothing
-		startClock();
+      // startClock();
+      console.log("OO")
+      increaseTime()
     }
   }
+
   ourRequest.onerror = function() {
     // Nothing
-//	  startClock();
+    // startClock();
+    console.log("OO")
+    increaseTime()
   }
+
   console.log(JSON.stringify(data));
   ourRequest.send(JSON.stringify(data));
 };
 
 
-const getQuestion = (queNum) => {
-//  start = 0;
-  startClock();
-  let data = {
-    queNum : queNum
-  };
-  sendRequest('POST','/question/',data);
+const getQuestion = queNum => {
+  // start = 0;
+  s = 0;
+  m = 0;
+  // // startClock();
+  // console.log("OO")
+  // increaseTime()
+  // let data = { queNum };
+  // sendRequest('POST', '/question/', data);
+  sendRequest('POST', '/question/', { queNum });
 };
 
-function getQNum(){
-	return qNo;
-}
-
-window.onresize = function(){
+window.onresize = function() {
     if ((window.outerHeight - window.innerHeight) > 100) {
-        // console was opened (or screen was resized)
-		alert("Sorry!! you will be logged out since you didn't follow instructions");
-		window.location.href="/logout"
+      // console was opened (or screen was resized)
+      alert("Sorry! You will be logged out since you didn't follow the instructions.");
+      window.location.href = "/logout"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getCookie(name) {
   var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
   return v ? v[2] : null;
 }
+
 function login() {
   var csrf_token = getCookie('csrftoken');
   var ourRequest = new XMLHttpRequest();
@@ -239,19 +251,13 @@ function login() {
   ourRequest.setRequestHeader("X-CSRFToken", csrf_token);
   ourRequest.setRequestHeader("Content-type", "application/json");
   ourRequest.onload = function() {
-    if (ourRequest.status >= 200 && ourRequest.status < 400) {
-		;
-    } else {
-    }
+    if (ourRequest.status >= 200 && ourRequest.status < 400) { ; }
+    else {}
   }
   ourRequest.onerror = function() {
     // Nothing
   }
   ourRequest.send();
-}
-
-window.onload = () => {
-    startClock();
 }
 
 function showAbout() {
@@ -295,17 +301,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  let hamburger = document.querySelector(".hamburger");
-  const title = document.querySelector('.title')
+let hamburger = document.querySelector(".hamburger");
+const title = document.querySelector('.title')
 
-hamburger.onclick = function(e){
+// Side-nav event handler
+hamburger.onclick = function(e) {
   e.preventDefault;
-  if(hamburger.classList.contains("active")){
+  if (hamburger.classList.contains("active")) {
     hamburger.classList.remove("active");
     hamburger.style.transform = 'translateX(0)';
     document.getElementById('sidenav').style.transform = 'translateX(-100%)';
     title.style.left = 'calc(3vh + 50px)'
-  }else{
+  }
+  else {
     hamburger.classList.add("active");
     hamburger.style.transform = 'translateX(21vw)';
     document.getElementById('sidenav').style.transform = 'translateX(0)';
@@ -342,10 +350,13 @@ let timerCont = document.getElementById('timer');
 //     clearInterval(timerInterval);
 // }
 
+// Seconds = s
+// Minutes = m
+// Run time function
 let s = 0, m = 0;
+let timerId;
 function increaseTime() {
-
-  setInterval(function() {
+    timerId = setInterval(function() {
     if (s > 59){
       s -= 60;
       m += 1;
@@ -370,8 +381,15 @@ function increaseTime() {
 
     s++;
   }, 1000)
-
-
 }
 
-increaseTime()
+// Pause time function
+function pauseTime() {
+  clearInterval(timerId);
+}
+
+window.onload = () => {
+  // startClock();
+  console.log("OO")
+  increaseTime()
+}
