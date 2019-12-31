@@ -29,7 +29,20 @@ inp.addEventListener('select', function() {
         if (ctrlDown && (e.keyCode == cKey)) console.log("Document catch Ctrl+C");
         if (ctrlDown && (e.keyCode == vKey)) console.log("Document catch Ctrl+V");
     });
-	
+
+  let i = 0;  
+  $('.leaderboard-icon').click(function() {
+    $('.leaderboard').fadeToggle();
+    if (i === 0) {
+      $('.li').html('cancel');
+      i = 1
+      // insert_chart
+    }
+    else {
+      $('.li').html('insert_chart')
+      i = 0;
+    }
+  })
 });
 const languages = ['c','java','cpp','cpp14','python2','python3'];
 
@@ -138,7 +151,6 @@ const sendRequest = (method,url,data) => {
   ourRequest.setRequestHeader("X-CSRFToken", csrf_token);
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
-      // console.log('output: ');
 		if(url == 'runCode/'){
 		  let recievedData = JSON.parse(ourRequest.responseText);
 		  setOutput(recievedData);
@@ -170,7 +182,7 @@ const sendRequest = (method,url,data) => {
 		}
     } else {
       // Nothing
-		startClock();
+		// startClock();
     }
   }
   ourRequest.onerror = function() {
@@ -184,7 +196,7 @@ const sendRequest = (method,url,data) => {
 
 const getQuestion = (queNum) => {
 //  start = 0;
-  startClock();
+  // startClock();
   let data = {
     queNum : queNum
   };
@@ -239,7 +251,7 @@ function login() {
 }
 
 window.onload = () => {
-    startClock();
+    // startClock();
 }
 
 function showAbout() {
@@ -284,6 +296,7 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   let hamburger = document.querySelector(".hamburger");
+  const title = document.querySelector('.title')
 
 hamburger.onclick = function(e){
   e.preventDefault;
@@ -291,38 +304,73 @@ hamburger.onclick = function(e){
     hamburger.classList.remove("active");
     hamburger.style.transform = 'translateX(0)';
     document.getElementById('sidenav').style.transform = 'translateX(-100%)';
+    title.style.left = 'calc(3vh + 50px)'
   }else{
     hamburger.classList.add("active");
     hamburger.style.transform = 'translateX(21vw)';
     document.getElementById('sidenav').style.transform = 'translateX(0)';
+    title.style.left = '3vh'
   }
 }
 
-function Submit() {
+// function Submit() {
     
-}
+// }
 
-let start = 0;
-let timerInterval;
-function startClock() {
-    timerInterval = setInterval(increaseTime, 1000);
-    function increaseTime() {
-        ++start;
-        if(start >= 60) {
-            if(start%60>=10) {
-                document.getElementById('timer').innerHTML = "0" + Number(Math.floor(start/60)) + ':' + Number(start%60);
-            } else {
-                document.getElementById('timer').innerHTML = "0" + Number(Math.floor(start/60)) + ':0' + Number(start%60);
-            }
-        } else if(start < 60 && start >= 10){
-            document.getElementById('timer').innerHTML = '00:' + Number(start);
-        } else if(start < 10) {
-            document.getElementById('timer').innerHTML = '00:0' + Number(start%60);
-        }
-//		console.log('Elapsed time: ',start);
+// let start = 0;
+// let timerInterval;
+let timerCont = document.getElementById('timer');
+// function increaseTime() 
+// function startClock() {
+//     timerInterval = setInterval(function() {
+//       start++;
+//       if(start >= 60) {
+//           if(start%60>=10) {
+//               timerCont.innerHTML = "0" + Number(Math.floor(start/60)) + ':' + Number(start%60);
+//           } else {
+//               timerCont.innerHTML = "0" + Number(Math.floor(start/60)) + ':0' + Number(start%60);
+//           }
+//       } else if(start < 60 && start >= 10){
+//           timerCont.innerHTML = '00:' + Number(start);
+//       } else if(start < 10) {
+//           timerCont.innerHTML = '00:0' + Number(start%60);
+//       }
+//     }, 1000);
+// }
+
+// function stopClock() {
+//     clearInterval(timerInterval);
+// }
+
+let s = 0, m = 0;
+function increaseTime() {
+  setInterval(function() {
+    if (s > 59){
+      s -= 60;
+      m += 1;
+    } 
+
+    if (m < 10) {
+      if (s < 10) {
+        timerCont.innerHTML = '0' + m + ':0' + s;
+      }
+      else {
+        timerCont.innerHTML = '0' + m + ':' + s;
+      }
     }
+    else {
+      if (s < 10) {
+        timerCont.innerHTML = m + ':0' + s;
+      }
+      else {
+        timerCont.innerHTML = + m + ':' + s;
+      }
+    }
+
+    s++;
+  }, 1000)
+
+
 }
 
-function stopClock() {
-    clearInterval(timerInterval);
-}
+increaseTime()

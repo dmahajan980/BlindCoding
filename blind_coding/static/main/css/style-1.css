@@ -60,3 +60,17 @@ header, footer, .left,.right {
 .run,.submit{
   width: 10vw;
 }
+
+#header ul li {
+  font-size: 20px;
+  color: #f5f5f5;
+  padding: 10px 30px;
+  border-radius: 25px;
+  margin: 5px;
+  cursor: pointer;
+  transition: all 100ms linear;
+}
+
+#header ul li:hover {
+  background-color: rgba(57, 255, 216, 0.8);
+}

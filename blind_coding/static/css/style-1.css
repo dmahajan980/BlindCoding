@@ -97,6 +97,7 @@ outline: none;
   margin-top: 10px;
   margin-right: 10px;
   background: none;
+  box-shadow: none;
   margin-top: 0;
 }
 
@@ -106,13 +107,14 @@ outline: none;
   margin: 0;
   display: flex;
   justify-content: flex-end;
+  margin-top: calc(3vh - 8px);
 }
 
 .title {
   color: white;
   position: absolute;
-  left: 40px;
-  top: 20px;
+  left: calc(3vh + 50px);
+  top: 3vh;
   margin: 0;
   font-size: 25px;
   z-index: 2;
@@ -121,8 +123,21 @@ outline: none;
 #header ul li {
   font-size: 20px;
   color: #f5f5f5;
-  margin: 5px 20px;
+  padding: 10px 30px;
+  border-radius: 25px;
+  margin: 5px;
   cursor: pointer;
+  transition: all 100ms linear;
+  line-height: 100%;
+}
+
+#header ul li:hover {
+  background-color: rgba(57, 255, 216, 0.8);
+}
+
+nav#header ul a {
+  line-height: 100%;
+  padding: 0;
 }
 
 #main {
@@ -135,6 +150,7 @@ outline: none;
   flex-direction: column;
   color: white;
   font-size: 16px;
+  padding: 25px 15px;
   sizing: expand;
 }
 
@@ -148,7 +164,7 @@ outline: none;
   top: 10px;
   right: 10px;
   min-height: 83vh;
-  border-radius: 10px;
+  border-radius: 20px;
 }
 /* #main > nav {
   background: #D7E8D4;
@@ -169,19 +185,24 @@ outline: none;
 button {
   outline: none;
   font-size: 20px;
-  padding: 0px 20px;
+  padding: 15px 20px;
   width: 15vw;
-  min-height: 7vh;
+  /* min-height: 7vh; */
   display: flex;
   align-items: center;
   justify-content: center;
   color: whitesmoke;
   background-color: #0d0a26;
   border: 0.5px solid whitesmoke;
-  border-radius: 5px;
+  border-radius: 50px;
   margin: 10px 0;
   cursor: pointer;
   margin-right: 20px;
+  transition: all 100ms linear;
+}
+
+button:hover {
+  background-color: rgba(57, 255, 216, 0.8);
 }
 
 button:focus {
@@ -207,7 +228,7 @@ header, footer, .left,.right {
 
 .language {
   height: 7vh;
-  margin: 10px 0;
+  margin: 0 0 5px 0;
 }
 
 #langSelect {
@@ -225,6 +246,8 @@ header, footer, .left,.right {
 
 .select-wrapper input.select-dropdown {
   color: whitesmoke !important;
+  padding: 0 20px !important;
+  box-sizing: border-box !important;
 }
 
 .editor {
@@ -232,10 +255,10 @@ header, footer, .left,.right {
 }
 
 .editor textarea {
-  padding: 10px;
+  padding: 20px;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   resize: none;
   box-sizing: border-box;
   font-family: 'Montserrat', sans-serif;
@@ -253,10 +276,10 @@ textarea:focus {
 }
 
 #compilerOutput {
-  padding: 10px;
+  padding: 20px;
   width: 100%;
   height: 100%;
-  border-radius: 10px;
+  border-radius: 20px;
   font-family: 'Montserrat', sans-serif;
   box-sizing: border-box;
   color: white;
@@ -293,20 +316,53 @@ textarea:focus {
 	
 }
 
+.leaderboard-icon {
+  padding: 20px;
+  position: absolute;
+  bottom: 10px;
+  left: 15px;
+  cursor: pointer;
+  background: black;
+  border: 0.5px solid whitesmoke;
+  border-radius: 50%;
+  display: flex;
+}
+
+.leaderboard-icon .material-icons {
+  font-size: 24px;
+  /* transform: scale(1.2); */
+  color: white;
+}
+
+.leaderboard {
+  height: 75vh;
+  width: 90vh;
+  background: black;
+  border: 0.5px solid whitesmoke;
+  border-radius: 20px;
+  position: absolute;
+  bottom: 13vh;
+  left: 15px;
+  padding: 20px;
+  display: none;
+  overflow-y:scroll;
+}
+
 .scoreboard {
   position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  left: 10px;
+  left: 100px;
   bottom: 10px;
-  width: 20vw;
-  height: 10vh;
+  width: auto;
+  height: auto;
   background: black;
   border: 0.5px solid whitesmoke;
-  border-radius: 7px;
+  border-radius: 50px;
   color: white;
   font-size: 20px;
+  padding: 10px 25px;
 }
 
 .scoreboard > span {
@@ -324,14 +380,42 @@ textarea:focus {
   color: #bbb;
 }
 
+table {
+  color: white;
+}
+
+tr {
+  height: auto;
+}
+
+tr:nth-child(1) {
+  border-bottom: 1px solid white;
+}
+
+tr th {
+  padding: 15px 5px;
+}
+
+tr td {
+  padding: 10px 5px;
+}
+
+tr td, tr th {
+  text-align: center;
+}
+
+.rank, .score {
+  width: 20px;
+}
+
 /* Sidenav */
 
 .hamburger {
   cursor: pointer;
   width: 28px;
   position: absolute;
-  top: 20px;
-  left: 5px;
+  top: 3vh;
+  left: 3vh;
   z-index: 10;
 }
 .hamburger .line {
@@ -456,8 +540,8 @@ textarea:focus {
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  width: 5px;
-  height: 30px;
+  width: 4px;
+  height: 24px;
 }
 
 .h-line {
@@ -466,8 +550,8 @@ textarea:focus {
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  width: 30px;
-  height: 5px;
+  width: 24px;
+  height: 4px;
 }
 
 #sidenav ul {
@@ -483,23 +567,23 @@ textarea:focus {
   display: flex;
   align-items: center;
   margin: 0;
-  padding: 15px;
-  height: 15vh;
+  padding: 0 15px;
+  height: 11vh;
   width: 100%;
   box-sizing: border-box;
 }
 
 a {
-  font-size: 17px;
-  margin: 0 10px;
+  font-size: 1.4rem;
+  margin-left: 10px;
   text-decoration: none;
   color: white !important;
   transition: 0.2s ease-in-out;
   cursor: pointer
 }
 
-a:hover {
-  border-bottom: 0.3px solid whitesmoke;
+#header ul a li:hover {
+  background-color: rgba(255, 40, 0, 1);
 }
 
 #codeInput{
