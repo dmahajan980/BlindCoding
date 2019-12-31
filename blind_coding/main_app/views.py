@@ -92,3 +92,19 @@ def runCode(request):
 def l_out(request):
     logout(request)
     return render(request,'index.html')
+
+def leaderboard(request):
+	leaderboard = Userdata.objects.order_by('-score')
+	print(leaderboard)
+	username = []
+	score = []
+	for i in range(10):
+		try:
+			username.append(leaderboard[i].name)
+			score.append(leaderboard[i].score)
+		except:
+			pass
+
+	resp = {'username': username, 'score': score}
+
+	return HttpResponse(json.dumps(resp), content_type='application/json')
