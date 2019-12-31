@@ -182,7 +182,7 @@ const sendRequest = (method,url,data) => {
 		}
     } else {
       // Nothing
-		startClock();
+		// startClock();
     }
   }
   ourRequest.onerror = function() {
@@ -196,7 +196,7 @@ const sendRequest = (method,url,data) => {
 
 const getQuestion = (queNum) => {
 //  start = 0;
-  startClock();
+  // startClock();
   let data = {
     queNum : queNum
   };
@@ -251,7 +251,7 @@ function login() {
 }
 
 window.onload = () => {
-    startClock();
+    // startClock();
 }
 
 function showAbout() {
@@ -344,7 +344,6 @@ let timerCont = document.getElementById('timer');
 
 let s = 0, m = 0;
 function increaseTime() {
-
   setInterval(function() {
     if (s > 59){
       s -= 60;
