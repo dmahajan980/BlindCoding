@@ -51,23 +51,26 @@ def question(request):
 def runCode(request):
 	postData = json.loads( request.body.decode('utf-8') )
 	url = 'https://api.jdoodle.com/execute/'
-#	print(postData)
+	print(postData)
 	que = Question.objects.get(qno=postData['qNo'])
 	postData['stdin'] = '3'+'\n'+que.test_case1+'\n'+que.test_case2+'\n'+que.test_case3
 	response = requests.post(url,json=postData)
 	resp = response.json()
 #	resp = json.loads(resp)
-	print(postData['qNo'])
-	print(resp)
-	print(resp['output'])
+	print('qNo',postData['qNo'])
+	print('jdoodle response json object: ',resp)
+	print('jdoodle output response: ',resp['output'])
 	res = {}
+	#Get current user
+	currUser = Userdata.objects.get(user_id = request.user)
+
 	if resp['output'].find('error') != -1:
 		res['output'] = resp['output']
 	else:
-		quesData = Question.objects.get(qno=postData['qNo'])
+		quesNo = postData['qNo']
+		quesData = Question.objects.get(qno= quesNo)
 		answer = quesData.test_case1_sol+'\n'+quesData.test_case2_sol+'\n'+quesData.test_case3_sol+'\n'
 		print(answer)
-		currUser = Userdata.objects.get(user_id = request.user)
 		currUser.timeElapsed += int(postData['timeElapsed'])
 		if answer == resp['output']:
 			print('hurray')
@@ -75,18 +78,17 @@ def runCode(request):
 			print(currUser.answerGiven)
 			lst = list(currUser.answerGiven)
 			print(lst)
-			if(lst[postData['qNo']] == '0'):
-				print('qwer')
+			if(lst[quesNo] == '0'):	# if the question is being answered first time
+				print('Updating score for question no', )
+				lst[quesNo] = '1'
+				currUser.answerGiven="".join(lst)
 				currUser.score+=10
 				currUser.save()
-			lst[postData['qNo']] = '1';
-			currUser.answerGiven="".join(lst)
-			
 		else:
 			res['output'] = 'Wrong answer..'
 			
 		currUser.save()
-		res['score'] = currUser.score
+	res['score'] = currUser.score
 	return HttpResponse(json.dumps(res))
 
 def l_out(request):
