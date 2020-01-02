@@ -15,21 +15,28 @@ inp.addEventListener('select', function() {
         cKey = 67;
 
     $(document).keydown(function(e) {
+        // console.log('Key pressed: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
     }).keyup(function(e) {
+        // console.log('Key released: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
     });
 
     $(".no-copy-paste").keydown(function(e) {
-        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)) return false;
+        // console.log('Key pressed inside editor: ', e.keyCode);
+        if(ctrlDown && (e.keyCode == cKey))
+        { 
+          console.log("Document catch Ctrl+C");
+        }
+        if(ctrlDown && (e.keyCode == vKey)){
+          console.log("Document catch Ctrl+V");
+        }
+        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)){
+          // console.log('copy-paste');
+          return false;
+       }
     });
     
-    // Document Ctrl + C/V 
-    $(document).keydown(function(e) {
-        if (ctrlDown && (e.keyCode == cKey)) console.log("Document catch Ctrl+C");
-        if (ctrlDown && (e.keyCode == vKey)) console.log("Document catch Ctrl+V");
-    });
-
   // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
@@ -64,44 +71,54 @@ let tc1 = '';
 let tc2 = '';
 let tc3 = '';
 
-const setCode = prog => {
+function setCode(prog){
   code = prog;
-};
-const getCode = () => { code }
+}
 
+function getCode(){ 
+  return code;
+}
 
-const setLanguage = langNum => {
+function setLanguage(langNum){
   langNo = langNum;
+}
+
+function getLanguage(){ 
+  return langNo 
 };
-const getLanguage = () => { langNo };
 
-
-const setVersion = vrsn => {
+function setVersion(vrsn){
   versionNo = vrsn;
-};
-const getVersion = () => { versions[versionNo] };
+}
 
+function getVersion(){ 
+  return versions[versionNo] 
+}
 
-const setCustomInput = inp => {
+function setCustomInput(inp){
   input = inp;
 }
-const getCustomInput = () => { input };
 
+function getCustomInput(){
+  return input 
+}
 
-const setOutput = outp => {
-  output = outp;
-};
-const getOutput = () => { output };
+function setOutput(outp) {
+  output = outp['output'];
+}
+function getOutput(){
+  return output 
+}
 
 function getQNum() { 
-  return qNo 
+  return qNo;
 }
 
 // Get the various inputs and send it to server
-const runCode = () => {
+function runCode(){
   // Pause, send time or store time
   // stopClock();
-  pauseTime()
+  pauseTime();
 
   console.log(`Time elapsed is: ${m} minutes and ${s} seconds`);
   
@@ -136,7 +153,7 @@ const runCode = () => {
   // For all test cases backend checks the output and returns no of test cases cleared
   // let resp = sendRequest('POST', 'runCode/', program);
   sendRequest('POST', 'runCode/', program);
-};
+}
 
 function getCookie(name) {
   var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -154,52 +171,50 @@ const sendRequest = (method, url, data) => {
 
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
+      // console.log('output: ');
       console.log('success 200');
-      
-      if (url == 'runCode/'){
-        console.log('1');
-        
-        let recievedData = JSON.parse(ourRequest.responseText);
-        setOutput(recievedData);
-        document.getElementById("compilerOutput").value = getOutput();
-        document.getElementById('score').innerHTML = recievedData['score'];
-        console.log(recievedData['score']);
-        if(getOutput() == 'Correct Answer') {
-          // start = 0;
-          s = 0;
-          m = 0;
-        }
-        // startClock();
-        console.log("OO")
-        increaseTime()
-
-        console.log(recievedData);
-
-        return recievedData;
-      }
-      else {
-        console.log('2')
-
-        let recievedData = JSON.parse(ourRequest.responseText);
-        let inpt = recievedData['sampIn'].split(' ');
-        let inStr = '';
-        for(let i = 0; i < inpt.length; i++) {
-          inStr += inpt[i];
-          inStr += '\n';
-        }
-        let que = recievedData['question'] + '<br><br>'+'Sample Input' + '<br>' + recievedData['sampTCNum'] + '<br>' + inStr + '<br><br>' + 'Sample Output' + '<br>' + recievedData['sampleOut'];
-        console.log('Hi ',recievedData);
-        document.getElementsByClassName('left')[0].innerHTML = que;
-        qNo = recievedData['qNo'];
+		if(url == 'runCode/'){
+      console.log('1');
+      let recievedData = JSON.parse(ourRequest.responseText);
+      console.log('receivedData: ', recievedData);
+		  setOutput(recievedData);
+		  document.getElementById("compilerOutput").value = getOutput();
+		  document.getElementById('score').innerHTML = recievedData['score'];
+		  console.log(recievedData['score']);
+      if(getOutput() == 'Correct Answer')
+      {
+        s = 0;
+        m = 0;
+        qNo = (getQNum() + 1) % 5;
         console.log(qNo);
-        console.log(recievedData['userScore']);
-        document.getElementById('score').innerHTML = recievedData['userScore'];
-
-        console.log(recievedData);
-
-        return recievedData;
+        document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
+        document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
+        console.log("OO");
       }
-    
+      increaseTime();
+		  return recievedData;
+		}
+		else{
+      console.log('2');
+			let recievedData = JSON.parse(ourRequest.responseText);
+			let inpt = recievedData['sampIn'].split(' ');
+			let inStr = '';
+			for(let i = 0; i < inpt.length;i++)
+			{
+				inStr += inpt[i];
+				inStr += '\n';
+			}
+			let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
+			console.log('hi ',recievedData);
+  			document.getElementsByClassName('left')[0].innerHTML=que;
+			qNo = recievedData['qNo'];
+			console.log(qNo);
+			console.log(recievedData['userScore']);
+      document.getElementById('score').innerHTML = recievedData['userScore'];
+      console.log(recievedData);
+			return recievedData;
+		}
+
     } else {
       // Nothing
       // startClock();
