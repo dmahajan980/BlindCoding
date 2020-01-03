@@ -12,7 +12,7 @@ def index(request):
 #    pass
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseRedirect,HttpResponse
-from .models import Userdata,Question
+from .models import Userdata,Question,Time_Penalty
 from django.contrib.auth import logout
 import json
 
@@ -47,49 +47,53 @@ def question(request):
 	print('hi')
 	print(res['userScore'])
 	return HttpResponse(json.dumps(res))
-	
-def runCode(request):
-	postData = json.loads( request.body.decode('utf-8') )
-	url = 'https://api.jdoodle.com/execute/'
-	print(postData)
-	que = Question.objects.get(qno=postData['qNo'])
-	postData['stdin'] = '3'+'\n'+que.test_case1+'\n'+que.test_case2+'\n'+que.test_case3
-	response = requests.post(url,json=postData)
-	resp = response.json()
-#	resp = json.loads(resp)
-	print('qNo',postData['qNo'])
-	print('jdoodle response json object: ',resp)
-	print('jdoodle output response: ',resp['output'])
-	res = {}
-	#Get current user
-	currUser = Userdata.objects.get(user_id = request.user)
 
-	if resp['output'].find('error') != -1:
-		res['output'] = resp['output']
-	else:
-		quesNo = postData['qNo']
-		quesData = Question.objects.get(qno= quesNo)
-		answer = quesData.test_case1_sol+'\n'+quesData.test_case2_sol+'\n'+quesData.test_case3_sol+'\n'
-		print(answer)
-		currUser.timeElapsed += int(postData['timeElapsed'])
-		if answer == resp['output']:
-			print('hurray')
-			res['output'] = 'Correct Answer'
-			print(currUser.answerGiven)
-			lst = list(currUser.answerGiven)
-			print(lst)
-			if(lst[quesNo] == '0'):	# if the question is being answered first time
-				print('Updating score for question no', )
-				lst[quesNo] = '1'
-				currUser.answerGiven="".join(lst)
-				currUser.score+=10
-				currUser.save()
-		else:
-			res['output'] = 'Wrong answer..'
-			
-		currUser.save()
-	res['score'] = currUser.score
-	return HttpResponse(json.dumps(res))
+def runCode(request):
+    postData = json.loads( request.body.decode('utf-8') )
+    url = 'https://api.jdoodle.com/execute/'
+    print(postData)
+    que = Question.objects.get(qno=postData['qNo'])
+    postData['stdin'] = '3'+'\n'+que.test_case1+'\n'+que.test_case2+'\n'+que.test_case3
+    response = requests.post(url,json=postData)
+    resp = response.json()
+#	resp = json.loads(resp)
+    print('qNo',postData['qNo'])
+    print('jdoodle response json object: ',resp)
+    print('jdoodle output response: ',resp['output'])
+    res = {}
+	#Get current user
+    currUser = Userdata.objects.get(user_id = request.user)
+    if resp['output'].find('error') != -1:
+        res['output'] = resp['output']
+    else:
+        quesNo = postData['qNo']
+        quesData = Question.objects.get(qno= quesNo)
+        answer = quesData.test_case1_sol+'\n'+quesData.test_case2_sol+'\n'+quesData.test_case3_sol+'\n'
+        print(answer)
+        currUser.timeElapsed += int(postData['timeElapsed'])
+        if answer == resp['output']:
+            print('hurray')
+            res['output'] = 'Correct Answer'
+            print(currUser.answerGiven)
+            lst = list(currUser.answerGiven)
+            print(lst)
+            if(lst[quesNo] == '0'):	# if the question is being answered first time
+                print('Updating score for question no', )
+                lst[quesNo] = '1'
+                currUser.answerGiven="".join(lst)
+                timepenalty=Time_Penalty.objects.get_or_create(player=currUser,question=que)
+                timepenalty.time_penalty=int(postData['timeElapsed'])+20/100*timepenalty.no_wa*que.weight
+                currUser.score=que.weight-timepenalty.time_penalty
+                timepenalty.save()
+                currUser.save()
+            else:
+                timepenalty=Time_Penalty.objects.get_or_create(player=currUser,question=que)
+                timepenalty.no_wa+=1
+                res['output'] = 'Wrong answer..'
+                timepenalty.save()
+            currUser.save()
+    res['score'] = currUser.score
+    return HttpResponse(json.dumps(res))
 
 def l_out(request):
     logout(request)
