@@ -135,10 +135,13 @@ function runCode(){
 
   console.log(getQNum())
 
-  var program = {
-      script : getCode(),
-      language: getLanguage(),
-      versionIndex: getVersion(),
+  let program = {
+      // Code equals script
+      // script : getCode(),
+      // language: getLanguage(),
+      script : prog,
+      language: lang,
+      versionIndex: versions[versionNo],
       stdin: getCustomInput(), //to give custom input
       qNo: getQNum(),
       timeElapsed: time
