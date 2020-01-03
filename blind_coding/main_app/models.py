@@ -8,13 +8,15 @@ class Userdata(models.Model):
     score = models.IntegerField(default = 0)
     answerGiven = models.CharField(max_length = 10, default="00000")
     timeElapsed = models.IntegerField(default = 0)
-	
+
     def __str__(self):
             return str(self.user_id.username)
 
 class Question(models.Model):
     qno=models.IntegerField(default=0)
+    weight = models.IntegerField()
     text = models.CharField(max_length=45000)
+    time_penalty = models.ManyToManyField(Userdata, through="Time_Penalty",blank=True,null=True)
     testcaseno=models.IntegerField(default=0)
     samplein = models.CharField(max_length=45000,default='')
     sampleout = models.CharField(max_length=45000,default='')
@@ -27,3 +29,15 @@ class Question(models.Model):
 
     def __str__(self):
         return str(self.pk)
+
+class Time_Penalty(models.Model):
+    player = models.ForeignKey(Userdata, on_delete=models.CASCADE)
+    question = models.ForeignKey(Question, on_delete=models.CASCADE,related_name='questions')
+    time_penalty = models.IntegerField(default=0)
+    no_wa = models.IntegerField(default=0)
+
+    class Meta:
+        unique_together = ("player", "question")
+
+    def __str__(self):
+        return "{} : {}".format(self.player.name, self.question.qno)
