@@ -44,6 +44,7 @@ inp.addEventListener('select', function() {
     if (i === 0) {
       $('.li').html('cancel');
       i = 1
+      getLeaderboard();
       // insert_chart
     }
     else {
