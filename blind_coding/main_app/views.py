@@ -15,6 +15,7 @@ from django.http import JsonResponse,HttpResponseRedirect,HttpResponse
 from .models import Userdata,Question
 from django.contrib.auth import logout
 import json
+import blind_coding.settings as settings
 
 from django.contrib.auth.decorators import login_required
 
@@ -51,9 +52,10 @@ def question(request):
 def runCode(request):
 	postData = json.loads( request.body.decode('utf-8') )
 	url = 'https://api.jdoodle.com/execute/'
-#	print(postData)
 	que = Question.objects.get(qno=postData['qNo'])
 	postData['stdin'] = '3'+'\n'+que.test_case1+'\n'+que.test_case2+'\n'+que.test_case3
+	postData['clientId'] = settings.clientId
+	postData['clientSecret'] = settings.clientSecret
 	response = requests.post(url,json=postData)
 	resp = response.json()
 #	resp = json.loads(resp)
