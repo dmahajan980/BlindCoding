@@ -15,27 +15,36 @@ inp.addEventListener('select', function() {
         cKey = 67;
 
     $(document).keydown(function(e) {
+        // console.log('Key pressed: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
     }).keyup(function(e) {
+        // console.log('Key released: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
     });
 
     $(".no-copy-paste").keydown(function(e) {
-        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)) return false;
+        // console.log('Key pressed inside editor: ', e.keyCode);
+        if(ctrlDown && (e.keyCode == cKey))
+        { 
+          console.log("Document catch Ctrl+C");
+        }
+        if(ctrlDown && (e.keyCode == vKey)){
+          console.log("Document catch Ctrl+V");
+        }
+        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)){
+          // console.log('copy-paste');
+          return false;
+       }
     });
     
-    // Document Ctrl + C/V 
-    $(document).keydown(function(e) {
-        if (ctrlDown && (e.keyCode == cKey)) console.log("Document catch Ctrl+C");
-        if (ctrlDown && (e.keyCode == vKey)) console.log("Document catch Ctrl+V");
-    });
-
+  // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
     $('.leaderboard').fadeToggle();
     if (i === 0) {
       $('.li').html('cancel');
       i = 1
+      getLeaderboard();
       // insert_chart
     }
     else {
@@ -44,96 +53,102 @@ inp.addEventListener('select', function() {
     }
   })
 });
+
 const languages = ['c','java','cpp','cpp14','python2','python3'];
-
 const versions = ['0','1','2'];
-
-var code = `
+let code = `
 #include <stdio.h>
 int main(){
   printf("Hello World num entered is :");
   return 0;
 }`;
-
 let langNo = 0;
 let versionNo = 0;
 let input = '1';
 let output = '';
-let qNo=0;
+let qNo = 0;
 let tc1 = '';
 let tc2 = '';
 let tc3 = '';
 
-const setCode = (prog)=>{
+function setCode(prog){
   code = prog;
-};
-
-const getCode = () => {
-  return code;
-};
-
-
-const setLanguage = (langNum) => {
-  langNo = langNum;
-};
-
-const getLanguage = () => {
-  return langNo;
-};
-
-
-const setVersion = (vrsn) => {
-  versionNo = vrsn;
-};
-
-const getVersion = () => {
-  return versions[versionNo];
 }
 
-const setCustomInput = (inp)=>{
+function getCode(){ 
+  return code;
+}
+
+function setLanguage(langNum){
+  langNo = langNum;
+}
+
+function getLanguage(){ 
+  return langNo 
+};
+
+function setVersion(vrsn){
+  versionNo = vrsn;
+}
+
+function getVersion(){ 
+  return versions[versionNo] 
+}
+
+function setCustomInput(inp){
   input = inp;
 }
 
-const getCustomInput = ()=>{
-  return input;
+function getCustomInput(){
+  return input 
 }
 
-const setOutput = (outp) => {
-  console.log('Result:',outp);
-  output = outp;
-};
+function setOutput(outp) {
+  output = outp['output'];
+}
+function getOutput(){
+  return output 
+}
 
-const getOutput = () => {
-  return output;
-};
+function getQNum() { 
+  return qNo;
+}
 
-const runCode = () => {
-  stopClock();
-	console.log('time elapsed is: ',start);
+// Get the various inputs and send it to server
+function runCode(){
+  // Pause, send time or store time
+  // stopClock();
+  pauseTime();
+
+  console.log(`Time elapsed is: ${m} minutes and ${s} seconds`);
+  
+  // Get code entered by the user and store it
   let prog = document.getElementById("codeInput").value;
-  setCode(prog);
+  // setCode(prog);
 
+  // Get language chosen by the user and store it
   let lang = document.getElementById("langSelect").value;
-  setLanguage(lang);
+  // setLanguage(lang);
 
-  console.log('Language: ',getLanguage(),'code: ',getCode());
+  // console.log('Language: ', getLanguage(), '\nCode: ', getCode());
+  let time = m * 60 + s;
 
+  console.log(getQNum())
 
   var program = {
       script : getCode(),
       language: getLanguage(),
       versionIndex: getVersion(),
       stdin: getCustomInput(), //to give custom input
-	  qNo: getQNum(),
-	  timeElapsed: start
+      qNo: getQNum(),
+      timeElapsed: time
   };
 
-  //just send this object to jdoodle url and send back the response
-  // for all test cases backend checks the output and returns no of test cases cleared
-  let resp = sendRequest('POST','runCode/',program);
-	
-
-};
+  // Send the code to jdoodle url with all other required parameters
+  // For all test cases backend checks the output and returns no of test cases cleared
+  // let resp = sendRequest('POST', 'runCode/', program);
+  sendRequest('POST', 'runCode/', program);
+}
 
 function getCookie(name) {
   var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -141,33 +156,48 @@ function getCookie(name) {
 }
 
 
-const sendRequest = (method,url,data) => {   
- var csrf_token = getCookie('csrftoken');
-  var ourRequest = new XMLHttpRequest();
-  ourRequest.open(method,url, true);
+const sendRequest = (method, url, data) => {   
+  let csrf_token = getCookie('csrftoken');
+  let ourRequest = new XMLHttpRequest();
+
+  ourRequest.open(method, url, true);
   ourRequest.setRequestHeader("Content-type", "application/json");
   ourRequest.setRequestHeader("X-CSRFToken", csrf_token);
+
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
+      // console.log('output: ');
+      console.log('success 200');
 		if(url == 'runCode/'){
-		  let recievedData = JSON.parse(ourRequest.responseText);
+      console.log('1');
+      let recievedData = JSON.parse(ourRequest.responseText);
+      console.log('receivedData: ', recievedData);
 		  setOutput(recievedData);
-		  document.getElementById("compilerOutput").value = getOutput().output;
+		  document.getElementById("compilerOutput").value = getOutput();
 		  document.getElementById('score').innerHTML = recievedData['score'];
 		  console.log(recievedData['score']);
-		  if(getOutput().output == 'Correct Answer')
-			  start = 0;
-//		  startClock();
+      if(getOutput() == 'Correct Answer')
+      {
+        s = 0;
+        m = 0;
+        qNo = (getQNum() + 1) % 5;
+        console.log(qNo);
+        document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
+        document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
+        console.log("OO");
+      }
+      increaseTime();
 		  return recievedData;
 		}
 		else{
+      console.log('2');
 			let recievedData = JSON.parse(ourRequest.responseText);
 			let inpt = recievedData['sampIn'].split(' ');
 			let inStr = '';
-			for(let i=0;i<inpt.length;i++)
+			for(let i = 0; i < inpt.length;i++)
 			{
-				inStr+=inpt[i];
-				inStr+='\n';
+				inStr += inpt[i];
+				inStr += '\n';
 			}
 			let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
 			console.log('hi ',recievedData);
@@ -175,61 +205,56 @@ const sendRequest = (method,url,data) => {
 			qNo = recievedData['qNo'];
 			console.log(qNo);
 			console.log(recievedData['userScore']);
-			document.getElementById('score').innerHTML = recievedData['userScore'];
+      document.getElementById('score').innerHTML = recievedData['userScore'];
+      console.log(recievedData);
 			return recievedData;
 		}
+
     } else {
       // Nothing
-		// startClock();
+      // startClock();
+      console.log("OO")
+      increaseTime()
     }
   }
+
   ourRequest.onerror = function() {
     // Nothing
-//	  startClock();
+    // startClock();
+    console.log("OO")
+    increaseTime()
   }
+
   console.log(JSON.stringify(data));
   ourRequest.send(JSON.stringify(data));
 };
 
 
-const getQuestion = (queNum) => {
-//  start = 0;
-  // startClock();
-  let data = {
-    queNum : queNum
-  };
-  sendRequest('POST','/question/',data);
+const getQuestion = queNum => {
+  // start = 0;
+  s = 0;
+  m = 0;
+  // // startClock();
+  // console.log("OO")
+  // increaseTime()
+  // let data = { queNum };
+  // sendRequest('POST', '/question/', data);
+  sendRequest('POST', '/question/', { queNum });
 };
 
-function getQNum(){
-	return qNo;
-}
-
-window.onresize = function(){
+window.onresize = function() {
     if ((window.outerHeight - window.innerHeight) > 100) {
-        // console was opened (or screen was resized)
-		alert("Sorry!! you will be logged out since you didn't follow instructions");
-		window.location.href="/logout"
+      // console was opened (or screen was resized)
+      alert("Sorry! You will be logged out since you didn't follow the instructions.");
+      window.location.href = "/logout"
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function getCookie(name) {
   var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
   return v ? v[2] : null;
 }
+
 function login() {
   var csrf_token = getCookie('csrftoken');
   var ourRequest = new XMLHttpRequest();
@@ -237,19 +262,13 @@ function login() {
   ourRequest.setRequestHeader("X-CSRFToken", csrf_token);
   ourRequest.setRequestHeader("Content-type", "application/json");
   ourRequest.onload = function() {
-    if (ourRequest.status >= 200 && ourRequest.status < 400) {
-		;
-    } else {
-    }
+    if (ourRequest.status >= 200 && ourRequest.status < 400) { ; }
+    else {}
   }
   ourRequest.onerror = function() {
     // Nothing
   }
   ourRequest.send();
-}
-
-window.onload = () => {
-    // startClock();
 }
 
 function showAbout() {
@@ -293,17 +312,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
-  let hamburger = document.querySelector(".hamburger");
-  const title = document.querySelector('.title')
+let hamburger = document.querySelector(".hamburger");
+const title = document.querySelector('.title')
 
-hamburger.onclick = function(e){
+// Side-nav event handler
+hamburger.onclick = function(e) {
   e.preventDefault;
-  if(hamburger.classList.contains("active")){
+  if (hamburger.classList.contains("active")) {
     hamburger.classList.remove("active");
     hamburger.style.transform = 'translateX(0)';
     document.getElementById('sidenav').style.transform = 'translateX(-100%)';
     title.style.left = 'calc(3vh + 50px)'
-  }else{
+  }
+  else {
     hamburger.classList.add("active");
     hamburger.style.transform = 'translateX(21vw)';
     document.getElementById('sidenav').style.transform = 'translateX(0)';
@@ -340,9 +361,13 @@ let timerCont = document.getElementById('timer');
 //     clearInterval(timerInterval);
 // }
 
+// Seconds = s
+// Minutes = m
+// Run time function
 let s = 0, m = 0;
+let timerId;
 function increaseTime() {
-  setInterval(function() {
+    timerId = setInterval(function() {
     if (s > 59){
       s -= 60;
       m += 1;
@@ -367,8 +392,15 @@ function increaseTime() {
 
     s++;
   }, 1000)
-
-
 }
 
-increaseTime()
+// Pause time function
+function pauseTime() {
+  clearInterval(timerId);
+}
+
+window.onload = () => {
+  // startClock();
+  console.log("OO")
+  increaseTime()
+}
