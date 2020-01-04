@@ -83,7 +83,8 @@ def runCode(request):
                 currUser.answerGiven="".join(lst)
                 timepenalty=Time_Penalty.objects.get_or_create(player=currUser,question=que)
                 timepenalty.time_penalty=int(postData['timeElapsed'])+20/100*timepenalty.no_wa*que.weight
-                currUser.score=que.weight-timepenalty.time_penalty
+                currUser.score+=que.weight
+                currUser.total_penalty+=timepenalty.time_penalty
                 timepenalty.save()
                 currUser.save()
             else:
@@ -100,7 +101,7 @@ def l_out(request):
     return render(request,'index.html')
 
 def leaderboard(request):
-	leaderboard = Userdata.objects.order_by('-score')
+	leaderboard = Userdata.objects.order_by('-score','total_penalty')
 	print(leaderboard)
 	username = []
 	score = []
