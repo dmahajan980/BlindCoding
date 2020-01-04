@@ -3,16 +3,16 @@ import requests
 
 # Create your views here.
 def default(request):
-    return render(request,'loggedIn.html')
+	return render(request,'loggedIn.html')
 
 def index(request):
-    return render(request,'index.html')
+	return render(request,'index.html')
 #
 #def login(request):
 #    pass
 from django.shortcuts import render
 from django.http import JsonResponse,HttpResponseRedirect,HttpResponse
-from .models import Userdata,Question
+from .models import Userdata,Question,Time_Penalty
 from django.contrib.auth import logout
 import json
 import blind_coding.settings as settings
@@ -48,7 +48,7 @@ def question(request):
 	print('hi')
 	print(res['userScore'])
 	return HttpResponse(json.dumps(res))
-	
+
 def runCode(request):
 	postData = json.loads( request.body.decode('utf-8') )
 	url = 'https://api.jdoodle.com/execute/'
@@ -66,7 +66,6 @@ def runCode(request):
 	res = {}
 	#Get current user
 	currUser = Userdata.objects.get(user_id = request.user)
-
 	if resp['output'].find('error') != -1:
 		res['output'] = resp['output']
 	else:
@@ -85,21 +84,30 @@ def runCode(request):
 				print('Updating score for question no', )
 				lst[quesNo] = '1'
 				currUser.answerGiven="".join(lst)
-				currUser.score+=10
+				timepenalty , status =Time_Penalty.objects.get_or_create(player=currUser,question=que)
+				timepenalty.time_penalty=int(postData['timeElapsed'])+(0.2*timepenalty.no_wa*que.weight)
+				currUser.score+=que.weight
+				currUser.total_penalty+=timepenalty.time_penalty
+				timepenalty.save()
 				currUser.save()
 		else:
+			timepenalty , status = Time_Penalty.objects.get_or_create(player=currUser,question=que)
+			print('hiii')
+			print('hola: ',timepenalty)
+			print('timepenalty_player',timepenalty.player)
+			timepenalty.no_wa+=1
 			res['output'] = 'Wrong answer..'
-			
+			timepenalty.save()
 		currUser.save()
 	res['score'] = currUser.score
 	return HttpResponse(json.dumps(res))
 
 def l_out(request):
-    logout(request)
-    return render(request,'index.html')
+	logout(request)
+	return render(request,'index.html')
 
 def leaderboard(request):
-	leaderboard = Userdata.objects.order_by('-score')
+	leaderboard = Userdata.objects.order_by('-score','total_penalty')
 	print(leaderboard)
 	username = []
 	score = []
