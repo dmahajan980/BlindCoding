@@ -15,7 +15,7 @@ class Userdata(models.Model):
 
 class Question(models.Model):
     qno=models.IntegerField(default=0)
-    weight = models.IntegerField()
+    weight = models.IntegerField(default=20)
     text = models.CharField(max_length=45000)
     time_penalty = models.ManyToManyField(Userdata, through="Time_Penalty",blank=True,null=True)
     testcaseno=models.IntegerField(default=0)
