@@ -8,6 +8,7 @@ class Userdata(models.Model):
     score = models.IntegerField(default = 0)
     answerGiven = models.CharField(max_length = 10, default="00000")
     timeElapsed = models.IntegerField(default = 0)
+    total_penalty=models.IntegerField(default = 0)
 
     def __str__(self):
             return str(self.user_id.username)
