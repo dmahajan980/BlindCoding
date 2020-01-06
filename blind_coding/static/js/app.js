@@ -41,7 +41,7 @@ $(document).ready(function() {
   // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
-    $('.leaderboard').fadeToggle();
+    $('.leaderboard').fadeToggle(1000, "swing");
     if (i === 0) {
       $('.li').html('cancel');
       i = 1

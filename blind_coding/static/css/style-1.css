@@ -501,12 +501,7 @@ tr td, tr th {
   transition-delay: 0s;
 }
 
-* {
-  -webkit-transition: 0.25s all ease;
-  -moz-transition: 0.25s all ease;
-  -o-transition: 0.25s all ease;
-  transition: 0.25s all ease;
-}
+
 
 /* Sidenav body */
 
