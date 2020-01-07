@@ -118,6 +118,10 @@ def runCode(request):
 			timepenalty.save()
 	currUser.save()
 	res['score'] = currUser.score
+	if currUser.answerGiven == "11111":
+		res['completedGame'] = 'true'
+	else:
+		res['completedGame'] = 'false'
 	return HttpResponse(json.dumps(res))
 
 def l_out(request):

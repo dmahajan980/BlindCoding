@@ -41,7 +41,7 @@ $(document).ready(function() {
   // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
-    $('.leaderboard').fadeToggle();
+    $('.leaderboard').fadeToggle(650, "swing");
     if (i === 0) {
       $('.li').html('cancel');
       i = 1
@@ -200,6 +200,12 @@ const sendRequest = (method, url, data) => {
         console.log(recievedData['score']);
         if(getOutput() == 'Correct Answer')
         {
+          Swal.fire(
+            'Congratulations',
+            'You have successfully attempted all the questions',
+            'success'
+          );
+          window.location.href = "/logout";
           s = 0;
           m = 0;
           qNo = (getQNum() + 1) % 5;
@@ -300,13 +306,13 @@ function login() {
   ourRequest.send();
 }
 
-function showAbout() {
-    document.getElementsByClassName('about')[0].style.display = 'flex';
+function showInstructions() {
+    document.getElementsByClassName('instructions')[0].style.display = 'flex';
     document.getElementsByClassName('backdrop')[0].style.display = 'block';
 }
 
-function closeAbout() {
-    document.getElementsByClassName('about')[0].style.display = 'none';
+function closeInstructions() {
+    document.getElementsByClassName('instructions')[0].style.display = 'none';
     document.getElementsByClassName('backdrop')[0].style.display = 'none';
 }
 
