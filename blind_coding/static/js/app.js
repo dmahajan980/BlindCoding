@@ -41,7 +41,7 @@ $(document).ready(function() {
   // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
-    $('.leaderboard').fadeToggle(1000, "swing");
+    $('.leaderboard').fadeToggle(650, "swing");
     if (i === 0) {
       $('.li').html('cancel');
       i = 1
@@ -200,12 +200,22 @@ const sendRequest = (method, url, data) => {
 		  console.log(recievedData['score']);
       if(getOutput() == 'Correct Answer')
       {
+        if(recievedData['completedGame'] == 'true')
+        {
+          Swal.fire(
+            'Congratulations',
+            'You have successfully attempted all the questions',
+            'success'
+          );
+          window.location.href = "/logout";
+        }
         s = 0;
         m = 0;
         qNo = (getQNum() + 1) % 5;
         console.log(qNo);
         document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
         document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
+        document.getElementById("codeInput").value = "";
         console.log("OO");
       }
       increaseTime();
@@ -268,7 +278,7 @@ window.onresize = function() {
     if ((window.outerHeight - window.innerHeight) > 100) {
       // console was opened (or screen was resized)
       alert("Sorry! You will be logged out since you didn't follow the instructions.");
-      window.location.href = "/logout"
+      window.location.href = "/logout";
     }
 }
 
@@ -293,13 +303,13 @@ function login() {
   ourRequest.send();
 }
 
-function showAbout() {
-    document.getElementsByClassName('about')[0].style.display = 'flex';
+function showInstructions() {
+    document.getElementsByClassName('instructions')[0].style.display = 'flex';
     document.getElementsByClassName('backdrop')[0].style.display = 'block';
 }
 
-function closeAbout() {
-    document.getElementsByClassName('about')[0].style.display = 'none';
+function closeInstructions() {
+    document.getElementsByClassName('instructions')[0].style.display = 'none';
     document.getElementsByClassName('backdrop')[0].style.display = 'none';
 }
 

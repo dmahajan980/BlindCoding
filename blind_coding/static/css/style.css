@@ -29,7 +29,7 @@ body, html {
     background: rgba(0,0,0,0.8);
 }
 
-.about {
+.instructions {
     color: white;
     display: none;
     position: absolute;

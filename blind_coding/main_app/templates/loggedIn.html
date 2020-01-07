@@ -60,20 +60,23 @@
 		</div>
 		<div class="backdrop">
 			</div>
-			<div class="about">
-				<div id="close" onclick="closeAbout()">
+			<div class="instructions">
+				<div id="close" onclick="closeInstructions()">
 					<span class="horiz"></span>
 					<span class="verti"></span>
 				</div>
-				<h3>About</h3>
-				<h5>1. What is Lorem Ipsum?</h5>
-				<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
-				<h5>2. Where does it come from?</h5>
-				<p>Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32. The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested.</p>
-		</div>
+				<h3>Instructions</h3>
+				<h5>- There are five questions of varying difficulties and points associated with them. <br> Score associated are 20, 30, 40, 50, 60 points respectively.</h5>
+				<h5>- For every question, the first time you submit the correct answer, you are awarded points corresponding to that question and the time penalty is 
+					also calculated which takes into consideration the time taken until last successful solve together with the number of wrong attempts</h5>
+				<h5>- Standings will be based on the points scored and in cases of clashes, time penalties are compared and one with lesser time penalty is better ranker</h5>
+				<h5>- Every time you give a correct answer, the question is automatically changed and code editor is reset.</h5>
+				<h5>- You have only two attempts throughout the event to see the code you have written. To see the code, press Show Code button near Run button.</h5>
+				<h5>- Don't try to open up the console or changing the window/tab. You'll be logged out immediately</h5>
+			</div>
 	  <nav id="header">
 		<ul>
-			<li onclick="showAbout()">About</li>
+			<li onclick="showInstructions()">Instructions</li>
 			<li>Contact</li>
 			<a href="/logout"><li>Logout</li></a>
 		</ul>
