@@ -1,11 +1,12 @@
 // var request = require('request');
 
 $(document).ready(function() {
+  populateLangs();
 	var inp = document.getElementsByClassName('noselect')[0];
-getQuestion(0);
-inp.addEventListener('select', function() {
-  this.selectionStart = this.selectionEnd;
-}, false);
+  getQuestion(0);
+  inp.addEventListener('select', function() {
+    this.selectionStart = this.selectionEnd;
+  }, false);
 	
 	document.addEventListener('contextmenu', event => event.preventDefault());
     var ctrlDown = false,
@@ -15,21 +16,28 @@ inp.addEventListener('select', function() {
         cKey = 67;
 
     $(document).keydown(function(e) {
+        // console.log('Key pressed: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = true;
     }).keyup(function(e) {
+        // console.log('Key released: ', e.keyCode);
         if (e.keyCode == ctrlKey || e.keyCode == cmdKey) ctrlDown = false;
     });
 
     $(".no-copy-paste").keydown(function(e) {
-        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)) return false;
+        // console.log('Key pressed inside editor: ', e.keyCode);
+        if(ctrlDown && (e.keyCode == cKey))
+        { 
+          console.log("Document catch Ctrl+C");
+        }
+        if(ctrlDown && (e.keyCode == vKey)){
+          console.log("Document catch Ctrl+V");
+        }
+        if (ctrlDown && (e.keyCode == vKey || e.keyCode == cKey)){
+          // console.log('copy-paste');
+          return false;
+       }
     });
     
-    // Document Ctrl + C/V 
-    $(document).keydown(function(e) {
-        if (ctrlDown && (e.keyCode == cKey)) console.log("Document catch Ctrl+C");
-        if (ctrlDown && (e.keyCode == vKey)) console.log("Document catch Ctrl+V");
-    });
-
   // Display/hide leaderboard
   let i = 0;  
   $('.leaderboard-icon').click(function() {
@@ -37,6 +45,7 @@ inp.addEventListener('select', function() {
     if (i === 0) {
       $('.li').html('cancel');
       i = 1
+      getLeaderboard();
       // insert_chart
     }
     else {
@@ -62,45 +71,72 @@ let qNo = 0;
 let tc1 = '';
 let tc2 = '';
 let tc3 = '';
+let languageIDs = JSON.parse("[{\"id\":45,\"name\":\"Assembly (NASM 2.14.02)\"},{\"id\":46,\"name\":\"Bash (5.0.0)\"},{\"id\":47,\"name\":\"Basic (FBC 1.07.1)\"},{\"id\":48,\"name\":\"C (GCC 7.4.0)\"},{\"id\":52,\"name\":\"C++ (GCC 7.4.0)\"},{\"id\":49,\"name\":\"C (GCC 8.3.0)\"},{\"id\":53,\"name\":\"C++ (GCC 8.3.0)\"},{\"id\":50,\"name\":\"C (GCC 9.2.0)\"},{\"id\":54,\"name\":\"C++ (GCC 9.2.0)\"},{\"id\":51,\"name\":\"C# (Mono 6.6.0.161)\"},{\"id\":55,\"name\":\"Common Lisp (SBCL 2.0.0)\"},{\"id\":56,\"name\":\"D (DMD 2.089.1)\"},{\"id\":57,\"name\":\"Elixir (1.9.4)\"},{\"id\":58,\"name\":\"Erlang (OTP 22.2)\"},{\"id\":44,\"name\":\"Executable\"},{\"id\":59,\"name\":\"Fortran (GFortran 9.2.0)\"},{\"id\":60,\"name\":\"Go (1.13.5)\"},{\"id\":61,\"name\":\"Haskell (GHC 8.8.1)\"},{\"id\":62,\"name\":\"Java (OpenJDK 13.0.1)\"},{\"id\":63,\"name\":\"JavaScript (Node.js 12.14.0)\"},{\"id\":64,\"name\":\"Lua (5.3.5)\"},{\"id\":65,\"name\":\"OCaml (4.09.0)\"},{\"id\":66,\"name\":\"Octave (5.1.0)\"},{\"id\":67,\"name\":\"Pascal (FPC 3.0.4)\"},{\"id\":68,\"name\":\"PHP (7.4.1)\"},{\"id\":43,\"name\":\"Plain Text\"},{\"id\":69,\"name\":\"Prolog (GNU Prolog 1.4.5)\"},{\"id\":70,\"name\":\"Python (2.7.17)\"},{\"id\":71,\"name\":\"Python (3.8.1)\"},{\"id\":72,\"name\":\"Ruby (2.7.0)\"},{\"id\":73,\"name\":\"Rust (1.40.0)\"},{\"id\":74,\"name\":\"TypeScript (3.7.4)\"}]");
 
-const setCode = prog => {
+function populateLangs()
+{
+  console.log('populating languages...');
+  let selectField = document.getElementById('langSelect');
+  for(element of languageIDs)
+  {
+    console.log('adding.. ',element);
+     var opt = document.createElement("option");
+     opt.value= element['id'];
+     opt.innerHTML = element['name']; // whatever property it has
+  
+     // then append it to the select element
+     selectField.appendChild(opt);
+  }
+}
+
+function setCode(prog){
   code = prog;
-};
-const getCode = () => { code }
+}
 
+function getCode(){ 
+  return code;
+}
 
-const setLanguage = langNum => {
+function setLanguage(langNum){
   langNo = langNum;
+}
+
+function getLanguage(){ 
+  return langNo 
 };
-const getLanguage = () => { langNo };
 
-
-const setVersion = vrsn => {
+function setVersion(vrsn){
   versionNo = vrsn;
-};
-const getVersion = () => { versions[versionNo] };
+}
 
+function getVersion(){ 
+  return versions[versionNo] 
+}
 
-const setCustomInput = inp => {
+function setCustomInput(inp){
   input = inp;
 }
-const getCustomInput = () => { input };
 
+function getCustomInput(){
+  return input 
+}
 
-const setOutput = outp => {
-  output = outp;
-};
-const getOutput = () => { output };
+function setOutput(outp) {
+  output = outp['stdout'];
+}
+function getOutput(){
+  return output 
+}
 
 function getQNum() { 
-  return qNo 
+  return qNo;
 }
 
 // Get the various inputs and send it to server
-const runCode = () => {
+function runCode(){
   // Pause, send time or store time
   // stopClock();
-  pauseTime()
+  pauseTime();
 
   console.log(`Time elapsed is: ${m} minutes and ${s} seconds`);
   
@@ -110,6 +146,7 @@ const runCode = () => {
 
   // Get language chosen by the user and store it
   let lang = document.getElementById("langSelect").value;
+  console.log('langCode: ', lang);
   // setLanguage(lang);
 
   // console.log('Language: ', getLanguage(), '\nCode: ', getCode());
@@ -121,11 +158,9 @@ const runCode = () => {
       // Code equals script
       // script : getCode(),
       // language: getLanguage(),
-      script : prog,
-      language: lang,
-      versionIndex: versions[versionNo],
-      clientId: "222a2ef84f6881409d32ae21369d1a32",
-   	  clientSecret: "67872757630a355db890ee74b6b20926cb9e025dbb444182df2bd2700fc64af1",
+      source_code : prog,
+      language_id: lang,
+      // versionIndex: versions[versionNo],
       stdin: getCustomInput(), //to give custom input
       qNo: getQNum(),
       timeElapsed: time
@@ -135,7 +170,7 @@ const runCode = () => {
   // For all test cases backend checks the output and returns no of test cases cleared
   // let resp = sendRequest('POST', 'runCode/', program);
   sendRequest('POST', 'runCode/', program);
-};
+}
 
 function getCookie(name) {
   var v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
@@ -153,52 +188,50 @@ const sendRequest = (method, url, data) => {
 
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
+      // console.log('output: ');
       console.log('success 200');
-      
-      if (url == 'runCode/'){
-        console.log('1');
-        
-        let recievedData = JSON.parse(ourRequest.responseText);
-        setOutput(recievedData);
-        document.getElementById("compilerOutput").value = getOutput();
-        document.getElementById('score').innerHTML = recievedData['score'];
-        console.log(recievedData['score']);
-        if(getOutput() == 'Correct Answer') {
-          // start = 0;
-          s = 0;
-          m = 0;
-        }
-        // startClock();
-        console.log("OO")
-        increaseTime()
-
-        console.log(recievedData);
-
-        return recievedData;
-      }
-      else {
-        console.log('2')
-
-        let recievedData = JSON.parse(ourRequest.responseText);
-        let inpt = recievedData['sampIn'].split(' ');
-        let inStr = '';
-        for(let i = 0; i < inpt.length; i++) {
-          inStr += inpt[i];
-          inStr += '\n';
-        }
-        let que = recievedData['question'] + '<br><br>'+'Sample Input' + '<br>' + recievedData['sampTCNum'] + '<br>' + inStr + '<br><br>' + 'Sample Output' + '<br>' + recievedData['sampleOut'];
-        console.log('Hi ',recievedData);
-        document.getElementsByClassName('left')[0].innerHTML = que;
-        qNo = recievedData['qNo'];
+		if(url == 'runCode/'){
+      console.log('1');
+      let recievedData = JSON.parse(ourRequest.responseText);
+      console.log('receivedData: ', recievedData);
+		  setOutput(recievedData);
+		  document.getElementById("compilerOutput").value = getOutput();
+		  document.getElementById('score').innerHTML = recievedData['score'];
+		  console.log(recievedData['score']);
+      if(getOutput() == 'Correct Answer')
+      {
+        s = 0;
+        m = 0;
+        qNo = (getQNum() + 1) % 5;
         console.log(qNo);
-        console.log(recievedData['userScore']);
-        document.getElementById('score').innerHTML = recievedData['userScore'];
-
-        console.log(recievedData);
-
-        return recievedData;
+        document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
+        document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
+        console.log("OO");
       }
-    
+      increaseTime();
+		  return recievedData;
+		}
+		else{
+      console.log('2');
+			let recievedData = JSON.parse(ourRequest.responseText);
+			let inpt = recievedData['sampIn'].split(' ');
+			let inStr = '';
+			for(let i = 0; i < inpt.length;i++)
+			{
+				inStr += inpt[i];
+				inStr += '\n';
+			}
+			let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
+			console.log('hi ',recievedData);
+  			document.getElementsByClassName('left')[0].innerHTML=que;
+			qNo = recievedData['qNo'];
+			console.log(qNo);
+			console.log(recievedData['userScore']);
+      document.getElementById('score').innerHTML = recievedData['userScore'];
+      console.log(recievedData);
+			return recievedData;
+		}
+
     } else {
       // Nothing
       // startClock();

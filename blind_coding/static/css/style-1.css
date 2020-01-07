@@ -363,7 +363,6 @@ textarea:focus {
   color: white;
   font-size: 20px;
   padding: 10px 25px;
-  z-index: 50;
 }
 
 .scoreboard > span {
@@ -383,12 +382,6 @@ textarea:focus {
 
 table {
   color: white;
-  border-radius: 20px;
-  border: 1px solid white;
-}
-
-tbody {
-  z-index: 20;  
 }
 
 tr {
