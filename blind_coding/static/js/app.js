@@ -269,7 +269,12 @@ const getQuestion = queNum => {
 window.onresize = function() {
     if ((window.outerHeight - window.innerHeight) > 100) {
       // console was opened (or screen was resized)
-      alert("Sorry! You will be logged out since you didn't follow the instructions.");
+      // alert("Sorry! You will be logged out since you didn't follow the instructions.");
+      Swal.fire(
+        'Sorry',
+        "You will be logged out since you didn't follow the instructions",
+        'warning'
+      )
       window.location.href = "/logout"
     }
 }
@@ -437,7 +442,12 @@ const showCode = () => {
     // Functionality won't be achieved after two clicks
     if (clicks >= 2) {
       // box.disabled = false;
-      alert('You have used up your time!');
+      // alert('You have used up your time!');
+      Swal.fire(
+        'Sorry..',
+        'You have used up your time!',
+        'error'
+      );
       return;
     }
     else {
@@ -454,7 +464,12 @@ const showCode = () => {
     console.log(clicks);
   }
   else{
-    alert('You have used up your time!');
+    // alert('You have used up your time!');
+    Swal.fire(
+      'Sorry..',
+      'You have used up your time!',
+      'warning'
+    );
   }
 }
 
