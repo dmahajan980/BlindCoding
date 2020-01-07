@@ -137,5 +137,5 @@ STATIC_ROOT = os.path.join(REPOSITORY_ROOT, 'static/')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(REPOSITORY_ROOT, 'media/')
 
-clientId: "222a2ef84f6881409d32ae21369d1a32"
-clientSecret:"67872757630a355db890ee74b6b20926cb9e025dbb444182df2bd2700fc64af1"
+clientId = "222a2ef84f6881409d32ae21369d1a32"
+clientSecret = "67872757630a355db890ee74b6b20926cb9e025dbb444182df2bd2700fc64af1"
