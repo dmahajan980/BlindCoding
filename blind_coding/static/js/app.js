@@ -431,13 +431,13 @@ const hideCode = () => {
 }
 
 const showCode = () => {
-  const box = document.getElementById('codeInput')
+  const box = document.getElementById('codeInput');
 
   if (box.disabled === false) {
     // Functionality won't be achieved after two clicks
-    if (clicks === 2) {
-      box.disabled = true;
-      alert('You have used up your time!')
+    if (clicks >= 2) {
+      // box.disabled = false;
+      alert('You have used up your time!');
       return;
     }
     else {
@@ -448,10 +448,13 @@ const showCode = () => {
       setTimeout(() => {
         hideCode()
         box.disabled = false;
-      }, 5000)
+      }, 5000);
     }
     clicks++;
-    console.log(clicks)
+    console.log(clicks);
+  }
+  else{
+    alert('You have used up your time!');
   }
 }
 
