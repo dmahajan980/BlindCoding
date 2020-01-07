@@ -79,7 +79,7 @@ function populateLangs()
   let selectField = document.getElementById('langSelect');
   for(element of languageIDs)
   {
-    console.log('adding.. ',element);
+    // console.log('adding.. ',element);
      var opt = document.createElement("option");
      opt.value= element['id'];
      opt.innerHTML = element['name']; // whatever property it has
@@ -189,53 +189,53 @@ const sendRequest = (method, url, data) => {
   ourRequest.onload = function() {
     if (ourRequest.status >= 200 && ourRequest.status < 400) {
       // console.log('output: ');
-      console.log('success 200');
-		if(url == 'runCode/'){
-      console.log('1');
-      let recievedData = JSON.parse(ourRequest.responseText);
-      console.log('receivedData: ', recievedData);
-		  setOutput(recievedData);
-		  document.getElementById("compilerOutput").value = getOutput();
-		  document.getElementById('score').innerHTML = recievedData['score'];
-		  console.log(recievedData['score']);
-      if(getOutput() == 'Correct Answer')
-      {
-        s = 0;
-        m = 0;
-        qNo = (getQNum() + 1) % 5;
-        console.log(qNo);
-        document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
-        document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
-        console.log("OO");
+      // console.log('success 200');
+      if(url == 'runCode/'){
+        console.log('1');
+        let recievedData = JSON.parse(ourRequest.responseText);
+        console.log('receivedData: ', recievedData);
+        setOutput(recievedData);
+        document.getElementById("compilerOutput").value = getOutput();
+        document.getElementById('score').innerHTML = recievedData['score'];
+        console.log(recievedData['score']);
+        if(getOutput() == 'Correct Answer')
+        {
+          s = 0;
+          m = 0;
+          qNo = (getQNum() + 1) % 5;
+          console.log(qNo);
+          document.getElementsByClassName('left')[0].getElementsByTagName('h5')[0] = "Question "+qNo;
+          document.getElementsByClassName('left')[0].innerHTML = getQuestion(qNo);
+          console.log("OO");
+        }
+        increaseTime();
+        return recievedData;
       }
-      increaseTime();
-		  return recievedData;
-		}
-		else{
-      console.log('2');
-			let recievedData = JSON.parse(ourRequest.responseText);
-			let inpt = recievedData['sampIn'].split(' ');
-			let inStr = '';
-			for(let i = 0; i < inpt.length;i++)
-			{
-				inStr += inpt[i];
-				inStr += '\n';
-			}
-			let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
-			console.log('hi ',recievedData);
-  			document.getElementsByClassName('left')[0].innerHTML=que;
-			qNo = recievedData['qNo'];
-			console.log(qNo);
-			console.log(recievedData['userScore']);
-      document.getElementById('score').innerHTML = recievedData['userScore'];
-      console.log(recievedData);
-			return recievedData;
-		}
+      else{
+        console.log('2');
+        let recievedData = JSON.parse(ourRequest.responseText);
+        let inpt = recievedData['sampIn'].split(' ');
+        let inStr = '';
+        for(let i = 0; i < inpt.length;i++)
+        {
+          inStr += inpt[i];
+          inStr += '\n';
+        }
+        let que = recievedData['question'] + '<br><br>'+'Sample Input'+'<br>'+recievedData['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+recievedData['sampleOut'];
+        console.log('hi ',recievedData);
+          document.getElementsByClassName('left')[0].innerHTML=que;
+        qNo = recievedData['qNo'];
+        // console.log(qNo);
+        // console.log(recievedData['userScore']);
+        document.getElementById('score').innerHTML = recievedData['userScore'];
+        console.log(recievedData);
+        return recievedData;
+      }
 
     } else {
       // Nothing
       // startClock();
-      console.log("OO")
+      // console.log("OO")
       increaseTime()
     }
   }
@@ -243,11 +243,11 @@ const sendRequest = (method, url, data) => {
   ourRequest.onerror = function() {
     // Nothing
     // startClock();
-    console.log("OO")
+    // console.log("OO")
     increaseTime()
   }
 
-  console.log(JSON.stringify(data));
+  // console.log(JSON.stringify(data));
   ourRequest.send(JSON.stringify(data));
 };
 
@@ -262,6 +262,8 @@ const getQuestion = queNum => {
   // let data = { queNum };
   // sendRequest('POST', '/question/', data);
   sendRequest('POST', '/question/', { queNum });
+  // console.log(queNum)
+  // clicks = 0;
 };
 
 window.onresize = function() {
@@ -305,8 +307,8 @@ function closeAbout() {
 
 document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('select');
-	console.log('hikljhg');
-//    var instances = M.FormSelect.init(elems, options);
+	  // console.log('hikljhg');
+    // var instances = M.FormSelect.init(elems, options);
   });
 
   // Or with jQuery
@@ -421,8 +423,47 @@ function pauseTime() {
   clearInterval(timerId);
 }
 
+// Won't allow user to cheat by changing text-color
+let codeIntervalId;
+let clicks = 0;
+const hideCode = () => {
+  codeIntervalId = setInterval(() => document.getElementById('codeInput').style.color = 'black', 200)
+}
+
+const showCode = () => {
+  const box = document.getElementById('codeInput');
+
+  if (box.disabled === false) {
+    // Functionality won't be achieved after two clicks
+    if (clicks >= 2) {
+      // box.disabled = false;
+      alert('You have used up your time!');
+      return;
+    }
+    else {
+      // Disable button and show code for 5 seconds
+      box.disabled = true;
+      clearInterval(codeIntervalId);
+      box.style.color = 'white';
+      setTimeout(() => {
+        hideCode()
+        box.disabled = false;
+      }, 5000);
+    }
+    clicks++;
+    console.log(clicks);
+  }
+  else{
+    alert('You have used up your time!');
+  }
+}
+
+document.getElementById('showCode').addEventListener('click', () => {
+  showCode()
+})
+
 window.onload = () => {
   // startClock();
-  console.log("OO")
   increaseTime()
+  hideCode();
 }
