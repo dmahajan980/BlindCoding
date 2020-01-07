@@ -178,8 +178,8 @@ nav#header ul a {
 
 .options {
   display: flex;
-  margin: 8px 0 0 0;
-  justify-content: space-around;
+  margin: 15px 0 0 0;
+  justify-content: center;
 }
 
 button {
@@ -287,8 +287,14 @@ textarea:focus {
   background: black;
 }
 
-.run,.submit{
+.bttn,.submit, #showCode{
   width: 10vw;
+  background-color: rgba(57, 255, 216, 0.8);
+  transition: all 100ms ease-in 50ms;
+}
+
+.bttn:nth-child(1) {
+  margin-right: 3.5vw;
 }
 
 #footer p {
@@ -588,7 +594,8 @@ a {
 
 #codeInput{
 	color: black;
-	caret-color: white;
+  caret-color: white;
+  transition: color 100ms ease-out;
 }
 
 ::selection{
