@@ -144,7 +144,16 @@ function getLanguage(){
   return document.getElementById("langSelect").value;
 }
 
+function disableRun(){
+  document.getElementById('runBtn').disabled = true;
+}
+
+function enableRun(){
+  document.getElementById('runBtn').disabled = false;
+}
+
 function runCode(){
+  disableRun();
   pauseTime();
   console.log(`Time elapsed is: ${m} minutes and ${s} seconds`);
 
@@ -177,10 +186,12 @@ function runCode(){
         getQuestion(qNo);
       }
       increaseTime();
+      enableRun();
     }
   ).catch(
     function(error){
       increaseTime();
+      enableRun();
       console.error(error);
     }
   );
