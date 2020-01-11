@@ -144,7 +144,9 @@ def leaderboard(request):
 	curr_score = curr_user.score
 	rank = 1
 	for player in leaderboard:
-		if curr_score < player.score:
+		if curr_user == player:
+			break
+		if curr_score <= player.score:
 			rank += 1
 
 	resp = {'username': username, 'score': score, 'rank': rank}

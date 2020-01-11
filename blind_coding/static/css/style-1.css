@@ -596,3 +596,8 @@ a {
 ::selection{
 	background: black;
 }
+
+table th {
+  position:sticky;
+  top:0;
+}
