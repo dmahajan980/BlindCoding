@@ -139,9 +139,17 @@ def leaderboard(request):
 			score.append(leaderboard[i].score)
 		except:
 			pass
+	
+	curr_user = Userdata.objects.get(user_id=request.user)
+	curr_score = curr_user.score
+	rank = 1
+	for player in leaderboard:
+		if curr_user == player:
+			break
+		if curr_score <= player.score:
+			rank += 1
 
-	resp = {'username': username, 'score': score}
-
+	resp = {'username': username, 'score': score, 'rank': rank}
 	return HttpResponse(json.dumps(resp), content_type='application/json')
 
 def getChancesUsed(request):

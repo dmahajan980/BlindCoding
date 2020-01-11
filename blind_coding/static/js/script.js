@@ -16,7 +16,7 @@ function getLeaderboard() {
                 document.getElementsByClassName('name')[i+2].innerHTML = objRecieved.username[i]; //Get Array of Username's here
                 document.getElementsByClassName('score')[i+2].innerHTML = objRecieved.score[i]; //Get Array of Score's here
             }
-            // document.getElementById('position').innerHTML = objRecieved.rank;
+            document.getElementById('userRank').innerHTML = 'Your Rank : ' + objRecieved.rank;
         },
         error : function() {
             console.log("Error");
