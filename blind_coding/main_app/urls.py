@@ -11,5 +11,7 @@ urlpatterns=[
      path('logout/', views.l_out, name='logout'),
      path('question/', views.question, name='question'),
      path('main/runCode/', views.runCode, name='runCode'),
-     path('leaderboard/', views.leaderboard, name='leaderboard')
+     path('leaderboard/', views.leaderboard, name='leaderboard'),
+     path('getChancesUsed/', views.getChancesUsed, name='getChancesUsed'),
+     path('increaseClicks/', views.increaseClicks, name='increaseClicks'),     
 ]

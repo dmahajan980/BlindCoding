@@ -6,6 +6,7 @@ class Userdata(models.Model):
     user_id=models.ForeignKey(User,on_delete=models.CASCADE)
     name=models.CharField(max_length=100)
     score = models.IntegerField(default = 0)
+    chancesUsed = models.IntegerField(default = 0)
     answerGiven = models.CharField(max_length = 10, default="00000")
     timeElapsed = models.IntegerField(default = 0)
     total_penalty=models.IntegerField(default = 0)

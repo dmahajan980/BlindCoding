@@ -14,20 +14,24 @@
         <img src="../../static/assets/apogeeLogo.png" id="apogeeLogo">
         <div class="backdrop">
             </div>
-            <div class="about">
-                <div id="close" onclick="closeAbout()">
-                    <span class="horiz"></span>
-                    <span class="verti"></span>
-                </div>
-                <h1>Instructions</h1>
-                <h4>1. What is Lorem Ipsum?</h4>
-                <h4>2. Where does it come from?</h4>
-                
-        </div>
+            <div class="instructions">
+				<div id="close" onclick="closeInstructions()">
+					<span class="horiz"></span>
+					<span class="verti"></span>
+				</div>
+				<h3>Instructions</h3>
+				<h5>- There are five questions of varying difficulties and points associated with them. <br> Score associated are 20, 30, 40, 50, 60 points respectively.</h5>
+				<h5>- For every question, the first time you submit the correct answer, you are awarded points corresponding to that question and the time penalty is 
+					also calculated which takes into consideration the time taken until last successful solve together with the number of wrong attempts</h5>
+				<h5>- Standings will be based on the points scored and in cases of clashes, time penalties are compared and one with lesser time penalty is better ranker</h5>
+				<h5>- Every time you give a correct answer, the question is automatically changed and code editor is reset.</h5>
+				<h5>- You have only two attempts throughout the event to see the code you have written. To see the code, press Show Code button near Run button.</h5>
+				<h5>- Don't try to open up the console or changing the window/tab. You'll be logged out immediately</h5>
+			</div>
     <div class="container">
         <nav id="header">
             <ul>
-                    <li onclick="showAbout()">About</li>
+                <li onclick="showInstructions()">Instructions</li>
                 <a href="/login"><li>Login</li></a>
             </ul>
         </nav>
@@ -51,6 +55,7 @@ coding with a vision, the vision of bat as they say.</b></p>
             <img src="../../static/assets/club-logo.svg" class="club-logo">
         </div>
     </div>
-<!--    <script src="../../static/js/script.js"></script>-->
+    <script src="/static/js/app.js"></script>
+	<script src="/static/js/script.js" type="text/javascript"></script>
 </body>
 </html>

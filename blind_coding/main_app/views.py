@@ -143,3 +143,18 @@ def leaderboard(request):
 	resp = {'username': username, 'score': score}
 
 	return HttpResponse(json.dumps(resp), content_type='application/json')
+
+def getChancesUsed(request):
+	res={}
+	res['chancesUsed'] = Userdata.objects.get(user_id = request.user).chancesUsed
+	return HttpResponse(json.dumps(res))
+
+def increaseClicks(request):
+	data = json.loads( request.body.decode('utf-8') )
+	clicks = data['clicks']
+	user = Userdata.objects.get(user_id = request.user)
+	user.chancesUsed = clicks
+	user.save()
+	res = {}
+	res['error'] = 'No Error'
+	return HttpResponse(json.dumps(res))
