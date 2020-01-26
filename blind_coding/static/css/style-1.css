@@ -37,7 +37,7 @@ outline: none;
   background: rgba(0,0,0,0.8);
 }
 
-.about {
+.instructions {
   color: white;
   display: none;
   position: absolute;
@@ -507,12 +507,7 @@ tr td, tr th {
   transition-delay: 0s;
 }
 
-* {
-  -webkit-transition: 0.25s all ease;
-  -moz-transition: 0.25s all ease;
-  -o-transition: 0.25s all ease;
-  transition: 0.25s all ease;
-}
+
 
 /* Sidenav body */
 
@@ -600,4 +595,9 @@ a {
 
 ::selection{
 	background: black;
+}
+
+table th {
+  position:sticky;
+  top:0;
 }

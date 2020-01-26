@@ -118,6 +118,10 @@ def runCode(request):
 			timepenalty.save()
 	currUser.save()
 	res['score'] = currUser.score
+	if currUser.answerGiven == "11111":
+		res['completedGame'] = 'true'
+	else:
+		res['completedGame'] = 'false'
 	return HttpResponse(json.dumps(res))
 
 def l_out(request):
@@ -135,7 +139,30 @@ def leaderboard(request):
 			score.append(leaderboard[i].score)
 		except:
 			pass
+	
+	curr_user = Userdata.objects.get(user_id=request.user)
+	curr_score = curr_user.score
+	rank = 1
+	for player in leaderboard:
+		if curr_user == player:
+			break
+		if curr_score <= player.score:
+			rank += 1
 
-	resp = {'username': username, 'score': score}
-
+	resp = {'username': username, 'score': score, 'rank': rank}
 	return HttpResponse(json.dumps(resp), content_type='application/json')
+
+def getChancesUsed(request):
+	res={}
+	res['chancesUsed'] = Userdata.objects.get(user_id = request.user).chancesUsed
+	return HttpResponse(json.dumps(res))
+
+def increaseClicks(request):
+	data = json.loads( request.body.decode('utf-8') )
+	clicks = data['clicks']
+	user = Userdata.objects.get(user_id = request.user)
+	user.chancesUsed = clicks
+	user.save()
+	res = {}
+	res['error'] = 'No Error'
+	return HttpResponse(json.dumps(res))
