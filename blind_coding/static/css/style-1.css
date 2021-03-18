@@ -593,6 +593,16 @@ a {
   transition: color 100ms ease-out;
 }
 
+#codeInput::selection{
+  color:black;
+  background:none;
+}
+
+#codeInput::-moz-selection{
+  color:black;
+  background:none;
+}
+
 ::selection{
 	background: black;
 }
