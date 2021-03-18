@@ -154,6 +154,13 @@ nav#header ul a {
   sizing: expand;
 }
 
+#main > .qno {
+  color: white;
+  font-size: 16px;
+  padding: 25px 15px;
+  sizing: expand;
+}
+
 .left h4 {
   margin: 0 0 10px 0;
 }
