@@ -270,16 +270,6 @@ textarea:focus {
   outline: none;
 }
 
-#codeInput::selection{
-  color:black;
-  background: none;
-}
-
-#codeInput::-moz-selection{
-  color:black;
-  background: none;
-}
-
 .outputArea {
   height: 25vh;
   margin: 10px 0 0 0;
@@ -601,6 +591,16 @@ a {
 	color: black;
   caret-color: white;
   transition: color 100ms ease-out;
+}
+
+#codeInput::selection{
+  color:black;
+  background:none;
+}
+
+#codeInput::-moz-selection{
+  color:black;
+  background:none;
 }
 
 ::selection{
