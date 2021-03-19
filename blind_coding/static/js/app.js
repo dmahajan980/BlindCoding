@@ -6,8 +6,12 @@ let timerCont = document.getElementById('timer');
 let s = 0, m = 0;
 let timerId;
 const _totalNumQues = 5;
+let codeMap= new Map();
 
 $(document).ready(function() {
+  for(var i=0; i<_totalNumQues; i++){
+    codeMap.set(i, null)
+  }
   populateLangs();
   getQuestion(0);
   disableCopyPaste();
@@ -231,7 +235,8 @@ function sendRequest(type, url, data){
 }
 
 function getQuestion(queNum){
-  
+
+  codeMap.set(qNo, getCode())
   sendRequest('POST', '/question/', { queNum }).then(
     function(response){
       response = JSON.parse(response);
@@ -243,9 +248,12 @@ function getQuestion(queNum){
           inStr += '\n';
         }
         let que = response['question'] + '<br><br>'+'Sample Input'+'<br>'+response['sampTCNum']+'<br>'+inStr+'<br><br>'+'Sample Output'+'<br>'+response['sampleOut'];
+        document.getElementsByClassName('qno')[0].innerHTML='Q. '+(queNum+1);
         document.getElementsByClassName('left')[0].innerHTML=que;
         qNo = response['qNo'];
         document.getElementById('score').innerHTML = response['userScore'];
+        var s= document.getElementById("codeInput");
+        s.value= codeMap.get(queNum)
     }
   ).catch(
     function(error){
