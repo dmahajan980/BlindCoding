@@ -421,6 +421,10 @@ tr td, tr th {
   width: 20px;
 }
 
+.hdrank{
+  width:170px;
+}
+
 /* Sidenav */
 
 .hamburger {
@@ -614,7 +618,10 @@ a {
 	background: black;
 }
 
-table th {
+table thead th{
   position:sticky;
   top:0;
+  z-index: 9;
+  background-color: black;
+  background-attachment: fixed;
 }

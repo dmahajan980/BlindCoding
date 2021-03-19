@@ -132,7 +132,7 @@
 			<table>
 				<thead>
 					<tr>
-						<th class="rank">Rank</th>
+						<th class="rank hdrank">Rank (Your Rank: <span id="myrank"></span>)</th>
 						<th class="name">Name</th>
 						<th class="score">Points</th>
 					</tr>
@@ -171,9 +171,9 @@
 		!function () {
 			function detectDevTool(allow) {
 				if (isNaN(+allow)) allow = 100;
-				var start = +new Date(); // Validation of built-in Object tamper prevention.
+				var start = +new Date();
 				debugger;
-				var end = +new Date(); // Validates too.
+				var end = +new Date();
 				if (isNaN(start) || isNaN(end) || end - start > allow) {
 				}
 			}
