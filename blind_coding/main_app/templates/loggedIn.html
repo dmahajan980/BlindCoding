@@ -67,7 +67,7 @@
 					<span class="verti"></span>
 				</div>
 				<h3>Instructions</h3>
-				<h5>- There are five questions of varying difficulties and points associated with them. <br> Score associated are 20, 30, 40, 50, 60 points respectively.</h5>
+				<h5>- There are five questions of varying difficulties and points associated with them. <br> Score associated are 20, 40, 60, 80, 100 points respectively.</h5>
 				<h5>- For every question, the first time you submit the correct answer, you are awarded points corresponding to that question and the time penalty is 
 					also calculated which takes into consideration the time taken until last successful solve together with the number of wrong attempts</h5>
 				<h5>- Standings will be based on the points scored and in cases of clashes, time penalties are compared and one with lesser time penalty is better ranker</h5>
@@ -84,6 +84,7 @@
 	  </nav> 
 	  <h3 class="title">Blind Coding</h3>
 	  <div id="main">
+		  	<div class="qno"></div>
 			<div class="left">
 				<h5>Question 1</h5>
 					Loading.....
@@ -131,7 +132,7 @@
 			<table>
 				<thead>
 					<tr>
-						<th class="rank">Rank</th>
+						<th class="rank hdrank">Rank (Your Rank: <span id="myrank"></span>)</th>
 						<th class="name">Name</th>
 						<th class="score">Points</th>
 					</tr>
@@ -164,5 +165,36 @@
 		</template>
 	<script src="/static/js/app.js"></script>
 	<script src="/static/js/script.js" type="text/javascript"></script>
+
+
+    <script>
+		!function () {
+			function detectDevTool(allow) {
+				if (isNaN(+allow)) allow = 100;
+				var start = +new Date();
+				debugger;
+				var end = +new Date();
+				if (isNaN(start) || isNaN(end) || end - start > allow) {
+				}
+			}
+			if (window.attachEvent) {
+				if (document.readyState === "complete" || document.readyState === "interactive") {
+					detectDevTool();
+					window.attachEvent('onresize', detectDevTool);
+					window.attachEvent('onmousemove', detectDevTool);
+					window.attachEvent('onfocus', detectDevTool);
+					window.attachEvent('onblur', detectDevTool);
+				} else {
+					setTimeout(argument.callee, 0);
+				}
+			} else {
+				window.addEventListener('load', detectDevTool);
+				window.addEventListener('resize', detectDevTool);
+				window.addEventListener('mousemove', detectDevTool);
+				window.addEventListener('focus', detectDevTool);
+				window.addEventListener('blur', detectDevTool);
+			}
+		}();
+	</script>
 </body>
 </html>

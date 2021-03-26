@@ -1,6 +1,7 @@
 # Blind Coding
 
 ## Bugs to be fixed/ Features to be added 
+
 - [X] Timer is not working properly, fix it
 - [X] When user gets a question correct, automatically redirect to next question
 - [X] Add a live leaderboard
@@ -11,4 +12,10 @@
 - [X] Add feature to show code for sometime, say 5-10 seconds once per question
 - [X] Disable run button for the time compiler runs the code and returns the result to prevent multiple compiler runs 
 - [X] Limit number of runs per question per user - feature not needed anymore
-- [ ] Add Rank of the player to the leaderboard
+- [X] Add Rank of the player to the leaderboard
+
+## Commit History Visualizer
+
+![GIF](CommitHistoryVisualizer/BlindCoding.gif)
+
+[video](CommitHistoryVisualizer/BlindCoding.mp4)

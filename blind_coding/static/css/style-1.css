@@ -154,6 +154,13 @@ nav#header ul a {
   sizing: expand;
 }
 
+#main > .qno {
+  color: white;
+  font-size: 16px;
+  padding: 25px 15px;
+  sizing: expand;
+}
+
 .left h4 {
   margin: 0 0 10px 0;
 }
@@ -414,6 +421,10 @@ tr td, tr th {
   width: 20px;
 }
 
+.hdrank{
+  width:170px;
+}
+
 /* Sidenav */
 
 .hamburger {
@@ -593,11 +604,24 @@ a {
   transition: color 100ms ease-out;
 }
 
+#codeInput::selection{
+  color:black;
+  background:none;
+}
+
+#codeInput::-moz-selection{
+  color:black;
+  background:none;
+}
+
 ::selection{
 	background: black;
 }
 
-table th {
+table thead th{
   position:sticky;
   top:0;
+  z-index: 9;
+  background-color: black;
+  background-attachment: fixed;
 }
